@@ -85,6 +85,13 @@
         <input type="number" id="gateSignUpWeight" placeholder="e.g. 70" min="1" max="500" step="0.1" autocomplete="off">
         <label for="gateSignUpHeight">Height (ft)</label>
         <input type="number" id="gateSignUpHeight" placeholder="e.g. 5.6" min="3" max="8" step="0.1" autocomplete="off">
+        <label for="gateSignUpFitnessGoal">What do you want to achieve?</label>
+        <select id="gateSignUpFitnessGoal" aria-label="Fitness goal">
+          <option value="">Select your goal</option>
+          <option value="reduce_weight">Reducing weight</option>
+          <option value="bulking">Bulking</option>
+          <option value="glutes">Adding glutes</option>
+        </select>
         <button type="button" class="btn btn-primary auth-gate-btn" id="gateSignUpSubmit">Sign up</button>
       </div>
       <button type="button" class="auth-gate-guest" id="gateContinueGuest">Continue as guest</button>
@@ -294,33 +301,108 @@
         </div>
       </section>
 
-      <!-- To-Dos / Reminders -->
-      <section id="todos" class="panel panel-todos">
-        <div class="section-banner banner-todos">
-          <h1>To-Dos & Reminders</h1>
-          <p class="section-desc">Zara will remind you so you don’t forget.</p>
+      <!-- Exercise detail (premium single-exercise page; shown when opening an exercise from workout) -->
+      <section id="exerciseDetail" class="panel panel-exercise-detail" aria-label="Exercise detail">
+        <div class="ex-detail-inner">
+          <!-- Back navigation -->
+          <header class="ex-detail-header">
+            <button type="button" class="ex-detail-back btn-icon" id="exerciseDetailBack" aria-label="Back to workout">←</button>
+          </header>
+
+          <!-- Video: external URL, rounded, minimal controls; skeleton while loading -->
+          <div class="ex-detail-video-wrap">
+            <div class="ex-detail-video-skeleton" id="exDetailVideoSkeleton" aria-hidden="true"></div>
+            <div class="ex-detail-video-placeholder hidden" id="exDetailVideoPlaceholder"><img id="exDetailVideoPlaceholderImg" src="" alt=""></div>
+            <div class="ex-detail-video-container hidden" id="exDetailVideoContainer">
+              <video class="ex-detail-video" id="exDetailVideo" controlsList="nodownload" playsinline preload="metadata" aria-label="Exercise demo">
+                <source id="exDetailVideoSource" src="" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <div class="ex-detail-video-controls" aria-label="Video controls">
+                <button type="button" class="ex-detail-video-btn ex-detail-play" id="exDetailPlayPause" aria-label="Play or pause"></button>
+                <button type="button" class="ex-detail-video-btn ex-detail-mute" id="exDetailMute" aria-label="Mute or unmute"></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exercise info card -->
+          <article class="ex-detail-info-card">
+            <h1 class="ex-detail-name" id="exDetailName">Exercise name</h1>
+            <div class="ex-detail-meta">
+              <span class="ex-detail-meta-item" id="exDetailTarget">
+                <span class="ex-detail-icon" aria-hidden="true">◉</span>
+                <span id="exDetailTargetText">Target muscle</span>
+              </span>
+              <span class="ex-detail-meta-item" id="exDetailEquipment">
+                <span class="ex-detail-icon" aria-hidden="true">⬡</span>
+                <span id="exDetailEquipmentText">Equipment</span>
+              </span>
+              <span class="ex-detail-meta-item ex-detail-difficulty" id="exDetailDifficulty">
+                <span class="ex-detail-icon" aria-hidden="true">◆</span>
+                <span id="exDetailDifficultyText">Difficulty</span>
+              </span>
+            </div>
+            <p class="ex-detail-duration" id="exDetailDuration"></p>
+          </article>
+
+          <!-- Step-by-step instructions -->
+          <section class="ex-detail-section ex-detail-instructions" aria-labelledby="exInstructionsHeading">
+            <h2 id="exInstructionsHeading" class="ex-detail-section-title">How to do it</h2>
+            <ol class="ex-detail-steps" id="exDetailSteps"></ol>
+            <p class="ex-detail-empty-state hidden" id="exDetailStepsEmpty">No instructions available.</p>
+          </section>
+
+          <!-- Muscle highlight: target + secondary, pill badges -->
+          <section class="ex-detail-section ex-detail-muscles" aria-labelledby="exMusclesHeading">
+            <h2 id="exMusclesHeading" class="ex-detail-section-title">Muscles worked</h2>
+            <div class="ex-detail-muscle-badges" id="exDetailMuscleBadges"></div>
+            <div class="ex-detail-diagram-placeholder" id="exDetailDiagramPlaceholder" aria-hidden="true">
+              <span>Muscle diagram</span>
+            </div>
+          </section>
+
+          <!-- Spacer so fixed bar doesn’t cover content -->
+          <div class="ex-detail-bottom-spacer"></div>
         </div>
-        <div class="taupe-banner"><span>Stay on top of tasks and shopping.</span></div>
-        <div class="todo-note">
-          <div class="todo-note-margin" aria-hidden="true"></div>
-          <div class="todo-note-paper">
-            <div class="todo-shopping-row">
-              <button type="button" class="btn btn-secondary btn-note" id="generateShoppingListBtn" title="Generate a healthy shopping list from your meal plan">
-                Generate AI shopping list from meal plan
-              </button>
+
+        <!-- Fixed bottom action bar -->
+        <div class="ex-detail-action-bar">
+          <button type="button" class="ex-detail-action-btn ex-detail-action-primary" id="exDetailStartBtn">Start exercise</button>
+          <button type="button" class="ex-detail-action-btn ex-detail-action-secondary" id="exDetailAddToWorkout">Add to workout</button>
+          <button type="button" class="ex-detail-action-btn ex-detail-action-icon" id="exDetailFavorite" aria-label="Save or favorite">
+            <span class="ex-detail-fav-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Workout / Exercise plan -->
+      <section id="todos" class="panel panel-workout">
+        <div class="section-banner banner-todos">
+          <h1>Your workout</h1>
+          <p class="section-desc">You don’t Plan by day. Start a timer for each exercise and follow your goal-based routine.</p>
+        </div>
+        <div class="workout-goal-hint hidden" id="workoutGoalHint">
+          <p>Set your <strong>fitness goal</strong> in Profile (Reducing weight, Bulking, or Adding glutes) to see your plan.</p>
+        </div>
+        <div class="workout-content" id="workoutContent">
+          <p class="workout-calendar-hint">Tap a date to see that day’s workout.</p>
+          <div class="workout-calendar-nav">
+            <button type="button" class="btn btn-ghost" id="workoutMonthPrev" title="Previous month">←</button>
+            <h2 id="workoutMonthLabel" class="workout-month-label">February 2025</h2>
+            <button type="button" class="btn btn-ghost" id="workoutMonthNext" title="Next month">→</button>
+          </div>
+          <div class="workout-calendar-wrap" id="workoutCalendarWrap">
+            <div class="workout-calendar-head">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
             </div>
-            <div class="todo-actions">
-              <input type="text" id="todoInput" placeholder="What do you need to do?" autocomplete="off">
-          <input type="datetime-local" id="todoDue" title="When to remind">
-          <button type="button" class="btn btn-primary btn-note" id="addTodoBtn">Add</button>
+            <div class="workout-calendar-grid" id="workoutCalendarGrid"></div>
+          </div>
+          <div id="workoutDayDetailPanel" class="workout-day-detail-panel hidden">
+            <div class="workout-day-detail-header">
+              <h3 id="workoutDayDetailTitle">Workout for this day</h3>
+              <button type="button" class="btn btn-ghost workout-day-detail-close" id="workoutDayDetailClose" title="Close">×</button>
             </div>
-            <div class="todo-filters">
-          <button type="button" class="filter-btn active" data-filter="all">All</button>
-          <button type="button" class="filter-btn" data-filter="today">Today</button>
-          <button type="button" class="filter-btn" data-filter="upcoming">Upcoming</button>
-          <button type="button" class="filter-btn" data-filter="done">Done</button>
-            </div>
-            <ul id="todoList" class="todo-list"></ul>
+            <div class="workout-day-detail-exercises" id="workoutDayDetailExercises"></div>
           </div>
         </div>
       </section>
@@ -390,101 +472,20 @@
         </div>
       </section>
 
-      <!-- Shop – our own catalog: categories → full-page product list with search -->
+      <!-- Shop – registered shops + categories → product list -->
       <section id="shop" class="panel panel-shop">
         <div class="shop-main" id="shopMain">
-          <div class="section-banner banner-shop">
-            <h1>Healthy products & supplements</h1>
-            <p class="section-desc">Browse our catalog of vitamins, supplements, protein, and wellness products.</p>
+          <div class="shop-hero banner-shop">
+            <h1 class="shop-hero-title">Healthy products & supplements</h1>
+            <p class="shop-hero-desc">Browse our catalog of vitamins, supplements, protein, and wellness products.</p>
           </div>
-          <div class="taupe-banner"><span>Quality supplements and healthy essentials.</span></div>
-          <div class="shop-categories">
-            <h2 class="shop-categories-title">Browse by category</h2>
-            <div class="shop-grid" id="shopCategoriesGrid">
-              <article class="shop-card" data-category="vitamins">
-                <div class="shop-card-image">
-                  <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop" alt="" loading="lazy">
-                  <span class="shop-card-overlay" aria-hidden="true"></span>
-                </div>
-                <div class="shop-card-body">
-                  <h3>Vitamins & supplements</h3>
-                  <p>Multivitamins, vitamin D, omega-3, and more.</p>
-                  <button type="button" class="btn btn-primary shop-view-btn" data-category="vitamins">View products</button>
-                </div>
-              </article>
-              <article class="shop-card" data-category="protein">
-                <div class="shop-card-image">
-                  <img src="https://images.unsplash.com/photo-1583454110551-21fd2e774299?w=400&h=300&fit=crop" alt="" loading="lazy">
-                  <span class="shop-card-overlay" aria-hidden="true"></span>
-                </div>
-                <div class="shop-card-body">
-                  <h3>Protein & fitness</h3>
-                  <p>Protein powder, BCAAs, and pre-workout.</p>
-                  <button type="button" class="btn btn-primary shop-view-btn" data-category="protein">View products</button>
-                </div>
-              </article>
-              <article class="shop-card" data-category="superfoods">
-                <div class="shop-card-image">
-                  <img src="https://images.unsplash.com/photo-1515694346937-2d5ecba82f76?w=400&h=300&fit=crop" alt="" loading="lazy">
-                  <span class="shop-card-overlay" aria-hidden="true"></span>
-                </div>
-                <div class="shop-card-body">
-                  <h3>Superfoods & greens</h3>
-                  <p>Spirulina, greens powder, and adaptogens.</p>
-                  <button type="button" class="btn btn-primary shop-view-btn" data-category="superfoods">View products</button>
-                </div>
-              </article>
-              <article class="shop-card" data-category="herbs">
-                <div class="shop-card-image">
-                  <img src="https://images.unsplash.com/photo-1597318181409-cf64d0b3d8a8?w=400&h=300&fit=crop" alt="" loading="lazy">
-                  <span class="shop-card-overlay" aria-hidden="true"></span>
-                </div>
-                <div class="shop-card-body">
-                  <h3>Herbs & natural health</h3>
-                  <p>Turmeric, ashwagandha, and herbal blends.</p>
-                  <button type="button" class="btn btn-primary shop-view-btn" data-category="herbs">View products</button>
-                </div>
-              </article>
-              <article class="shop-card" data-category="snacks">
-                <div class="shop-card-image">
-                  <img src="https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop" alt="" loading="lazy">
-                  <span class="shop-card-overlay" aria-hidden="true"></span>
-                </div>
-                <div class="shop-card-body">
-                  <h3>Healthy snacks</h3>
-                  <p>Nuts, seeds, protein bars, and clean snacks.</p>
-                  <button type="button" class="btn btn-primary shop-view-btn" data-category="snacks">View products</button>
-                </div>
-              </article>
-              <article class="shop-card" data-category="beauty">
-                <div class="shop-card-image">
-                  <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop" alt="" loading="lazy">
-                  <span class="shop-card-overlay" aria-hidden="true"></span>
-                </div>
-                <div class="shop-card-body">
-                  <h3>Beauty & wellness</h3>
-                  <p>Collagen, skin vitamins, and wellness oils.</p>
-                  <button type="button" class="btn btn-primary shop-view-btn" data-category="beauty">View products</button>
-                </div>
-              </article>
-            </div>
+          <div class="shop-taupe-strip">
+            <span>Quality supplements and healthy essentials.</span>
           </div>
-        </div>
-
-        <div class="shop-category-detail hidden" id="shopCategoryDetail">
-          <div class="shop-detail-header">
-            <button type="button" class="btn btn-ghost shop-back-btn" id="shopBackBtn" aria-label="Back to categories">← Back</button>
-            <h2 class="shop-detail-title" id="shopCategoryTitle">Products</h2>
+          <div class="shop-shops-section" id="shopShopsSection">
+            <h2 class="shop-section-title">Our shops</h2>
+            <div class="shop-shops-grid" id="shopShopsGrid"></div>
           </div>
-          <div class="shop-search-wrap">
-            <input type="search" id="shopSearchInput" class="shop-search-input" placeholder="Search products…" autocomplete="off" aria-label="Search products">
-            <button type="button" class="btn btn-primary shop-search-btn" id="shopSearchBtn" aria-label="Search">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              Search
-            </button>
-          </div>
-          <div class="shop-products-grid" id="shopProductsGrid"></div>
-          <p class="shop-no-results hidden" id="shopNoResults">No products match your search.</p>
         </div>
 
         <div class="shop-disclaimer">
@@ -506,6 +507,16 @@
           <form id="profilePageForm" class="profile-page-form">
             <label for="profilePageName">Display name</label>
             <input type="text" id="profilePageName" placeholder="Enter your name" autocomplete="name">
+            <label for="profilePageFitnessGoal">Fitness goal</label>
+            <select id="profilePageFitnessGoal" aria-label="What you want to achieve">
+              <option value="">Select your goal</option>
+              <option value="reduce_weight">Reducing weight</option>
+              <option value="bulking">Bulking</option>
+              <option value="glutes">Adding glutes</option>
+            </select>
+            <label for="profilePageExerciseApiKey">Exercise API key (optional)</label>
+            <input type="password" id="profilePageExerciseApiKey" placeholder="RapidAPI key for exercise videos" autocomplete="off">
+            <span class="profile-field-hint">Get a free key at rapidapi.com (ExerciseDB) for animated exercise demos.</span>
             <label for="profilePageCountry">Country</label>
             <select id="profilePageCountry" aria-label="Your country for meal suggestions">
               <option value="">Select your country</option>
@@ -549,7 +560,7 @@
       </a>
       <a href="#" class="bottom-nav-item link-more" data-section="todos">
         <svg class="bottom-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        <span class="bottom-nav-label">To-Dos</span>
+        <span class="bottom-nav-label">Workout</span>
       </a>
       <a href="#" class="bottom-nav-item link-more" data-section="shop">
         <svg class="bottom-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>

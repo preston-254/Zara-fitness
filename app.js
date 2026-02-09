@@ -12,74 +12,83 @@
     chat: 'zara_chat_history',
     userName: 'zara_user_name',
     userCountry: 'zara_user_country',
+    fitnessGoal: 'zara_fitness_goal',
+    exerciseApiKey: 'zara_exercise_api_key',
     diary: 'zara_food_diary',
     weekOffset: 'zara_week_offset',
     calendarMonthOffset: 'zara_calendar_month_offset',
     signup: 'zara_signup',
   };
 
+  const FITNESS_GOALS = [
+    { value: 'reduce_weight', label: 'Reducing weight' },
+    { value: 'bulking', label: 'Bulking' },
+    { value: 'glutes', label: 'Adding glutes' }
+  ];
+
   const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const MEAL_SLOTS = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
 
-  var SHOP_CATEGORY_LABELS = {
-    vitamins: 'Vitamins & supplements',
-    protein: 'Protein & fitness',
-    superfoods: 'Superfoods & greens',
-    herbs: 'Herbs & natural health',
-    snacks: 'Healthy snacks',
-    beauty: 'Beauty & wellness'
+  /* Exercise library: name, image, duration required. Optional for detail page: targetMuscle, equipment, difficulty, instructions[], secondaryMuscles[], videoUrl (external). */
+  var EXERCISE_LIBRARY = {
+    bench_press: { name: 'Bench Press', image: 'https://images.unsplash.com/photo-1534368959876-26bf04f2c947?w=400&h=300&fit=crop', duration: 45, targetMuscle: 'Chest', equipment: 'Barbell', difficulty: 'Intermediate', instructions: ['Lie on bench with feet flat. Grip bar slightly wider than shoulder-width.', 'Unrack and hold bar over chest with arms extended.', 'Lower bar to mid-chest with control, then press up to start.'], secondaryMuscles: ['Triceps', 'Shoulders'], videoUrl: '' },
+    barbell_squat: { name: 'Barbell Squat', image: 'https://images.unsplash.com/photo-1598289431512-b97b0917affc?w=400&h=300&fit=crop', duration: 45, targetMuscle: 'Quadriceps', equipment: 'Barbell', difficulty: 'Intermediate', instructions: ['Set bar on upper back. Stand with feet shoulder-width apart.', 'Brace core and push hips back, bending knees.', 'Descend until thighs at least parallel, then drive up to stand.'], secondaryMuscles: ['Glutes', 'Hamstrings', 'Core'], videoUrl: '' },
+    deadlift: { name: 'Deadlift', image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c149e?w=400&h=300&fit=crop', duration: 45, targetMuscle: 'Lower back', equipment: 'Barbell', difficulty: 'Intermediate', instructions: ['Stand with bar over mid-foot. Hinge at hips and grip bar.', 'Keep back flat, drive through heels and extend hips and knees.', 'Stand tall, then lower with control.'], secondaryMuscles: ['Hamstrings', 'Glutes', 'Traps'], videoUrl: '' },
+    hip_thrust: { name: 'Hip Thrust', image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop', duration: 45, targetMuscle: 'Glutes', equipment: 'Barbell', difficulty: 'Beginner', instructions: ['Sit with upper back on bench, bar over hips.', 'Drive through heels and squeeze glutes to extend hips.', 'Lower with control and repeat.'], secondaryMuscles: ['Hamstrings', 'Core'], videoUrl: '' },
+    shoulder_press: { name: 'Shoulder Press', image: 'https://images.unsplash.com/photo-1583454110551-21fd2e774299?w=400&h=300&fit=crop', duration: 45, targetMuscle: 'Shoulders', equipment: 'Barbell', difficulty: 'Intermediate', instructions: ['Hold bar at shoulder height, palms forward.', 'Press bar overhead until arms are extended.', 'Lower with control to shoulders.'], secondaryMuscles: ['Triceps', 'Upper chest'], videoUrl: '' },
+    lunges: { name: 'Lunges', image: 'https://images.unsplash.com/photo-1517836351153-17feac71832c?w=400&h=300&fit=crop', duration: 40, targetMuscle: 'Quadriceps', equipment: 'Bodyweight', difficulty: 'Beginner', instructions: ['Stand tall. Step one leg forward and lower back knee toward floor.', 'Keep front knee over ankle. Push through front heel to return.', 'Alternate legs or complete one side at a time.'], secondaryMuscles: ['Glutes', 'Hamstrings'], videoUrl: '' },
+    glute_bridge: { name: 'Glute Bridge', image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop', duration: 40, targetMuscle: 'Glutes', equipment: 'Bodyweight', difficulty: 'Beginner', instructions: ['Lie on back, knees bent, feet flat. Arms by sides.', 'Drive through heels and lift hips until body forms a line.', 'Squeeze glutes at top, then lower with control.'], secondaryMuscles: ['Hamstrings', 'Core'], videoUrl: '' },
+    treadmill: { name: 'Treadmill / Run', image: 'https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=400&h=300&fit=crop', duration: 300, targetMuscle: 'Full body', equipment: 'Treadmill', difficulty: 'Beginner', instructions: ['Set speed and incline. Start walking or jogging.', 'Maintain good posture and arm swing.', 'Cool down by reducing speed gradually.'], secondaryMuscles: [], videoUrl: '' },
+    row: { name: 'Barbell Row', image: 'https://images.unsplash.com/photo-1593079852290-6ad1af9b2d8a?w=400&h=300&fit=crop', duration: 45, targetMuscle: 'Back', equipment: 'Barbell', difficulty: 'Intermediate', instructions: ['Hinge at hips, bar hanging at arms’ length.', 'Pull bar to lower chest, squeezing shoulder blades.', 'Lower with control and repeat.'], secondaryMuscles: ['Biceps', 'Rear delts'], videoUrl: '' },
+    leg_press: { name: 'Leg Press', image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=400&h=300&fit=crop', duration: 45, targetMuscle: 'Quadriceps', equipment: 'Machine', difficulty: 'Beginner', instructions: ['Sit with back flat, feet on platform shoulder-width apart.', 'Release safety and lower weight by bending knees.', 'Press through heels to extend legs; do not lock knees.'], secondaryMuscles: ['Glutes', 'Hamstrings'], videoUrl: '' },
+    cable_kickback: { name: 'Cable Kickback', image: 'https://images.unsplash.com/photo-1583454110551-21fd2e774299?w=400&h=300&fit=crop', duration: 40, targetMuscle: 'Glutes', equipment: 'Cable', difficulty: 'Beginner', instructions: ['Attach ankle strap to low cable. Stand facing machine.', 'Kick one leg back, squeezing the glute at the top.', 'Return with control and repeat.'], secondaryMuscles: ['Hamstrings'], videoUrl: '' },
+    burpees: { name: 'Burpees', image: 'https://images.unsplash.com/photo-1517836351153-17feac71832c?w=400&h=300&fit=crop', duration: 60, targetMuscle: 'Full body', equipment: 'Bodyweight', difficulty: 'Intermediate', instructions: ['From standing, drop into a squat and place hands on floor.', 'Jump feet back to plank, then do a push-up (optional).', 'Jump feet to hands and jump up; repeat.'], secondaryMuscles: ['Core', 'Chest', 'Legs'], videoUrl: '' }
   };
 
-  var SHOP_PRODUCTS = {
-    vitamins: [
-      { id: 'v1', name: 'Daily Multivitamin', description: 'Complete A–Z with vitamins D3, B12, and folate.', price: '12.99', image: 'https://images.unsplash.com/photo-1550572017-edd951aa1ee5?w=400&h=300&fit=crop' },
-      { id: 'v2', name: 'Vitamin D3 1000 IU', description: 'Supports bone health and immunity.', price: '9.49', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop' },
-      { id: 'v3', name: 'Omega-3 Fish Oil', description: 'High EPA & DHA for heart and brain.', price: '18.99', image: 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=400&h=300&fit=crop' },
-      { id: 'v4', name: 'Vitamin C 1000mg', description: 'Antioxidant and immune support.', price: '7.99', image: 'https://images.unsplash.com/photo-1550572017-edd951aa1ee5?w=400&h=300&fit=crop' },
-      { id: 'v5', name: 'B-Complex', description: 'Energy and nervous system support.', price: '11.99', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop' },
-      { id: 'v6', name: 'Iron + Vitamin C', description: 'For healthy blood and energy.', price: '10.49', image: 'https://images.unsplash.com/photo-1550572017-edd951aa1ee5?w=400&h=300&fit=crop' }
+  var WEEKLY_WORKOUT_PLANS = {
+    reduce_weight: [
+      ['treadmill', 'burpees', 'lunges'],
+      ['treadmill', 'burpees'],
+      ['lunges', 'treadmill'],
+      ['burpees', 'lunges'],
+      ['treadmill', 'burpees', 'lunges'],
+      ['treadmill'],
+      []
     ],
-    protein: [
-      { id: 'p1', name: 'Whey Protein Vanilla', description: '24g protein per serving, grass-fed.', price: '34.99', image: 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop' },
-      { id: 'p2', name: 'Plant Protein Chocolate', description: 'Pea & rice, 20g protein, vegan.', price: '29.99', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop' },
-      { id: 'p3', name: 'BCAA Recovery', description: '2:1:1 ratio, supports muscle recovery.', price: '24.99', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop' },
-      { id: 'p4', name: 'Pre-Workout Energy', description: 'Caffeine-free focus and endurance.', price: '27.99', image: 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop' },
-      { id: 'p5', name: 'Collagen Peptides', description: 'Unflavored, supports joints & skin.', price: '31.99', image: 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=400&h=300&fit=crop' },
-      { id: 'p6', name: 'Creatine Monohydrate', description: '5g per serving, supports strength.', price: '19.99', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop' }
+    bulking: [
+      ['bench_press', 'barbell_squat', 'deadlift'],
+      ['shoulder_press', 'row', 'lunges'],
+      ['barbell_squat', 'bench_press', 'hip_thrust'],
+      ['deadlift', 'row', 'shoulder_press'],
+      ['bench_press', 'barbell_squat', 'leg_press'],
+      ['row', 'shoulder_press', 'lunges'],
+      []
     ],
-    superfoods: [
-      { id: 's1', name: 'Spirulina Powder', description: 'Organic, nutrient-dense blue-green algae.', price: '22.99', image: 'https://images.unsplash.com/photo-1515694346937-2d5ecba82f76?w=400&h=300&fit=crop' },
-      { id: 's2', name: 'Greens Powder', description: 'Blend of kale, spinach, barley grass.', price: '26.99', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop' },
-      { id: 's3', name: 'Chlorella Tablets', description: 'Detox and immune support.', price: '18.99', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop' },
-      { id: 's4', name: 'Maca Powder', description: 'Energy and hormone balance.', price: '14.99', image: 'https://images.unsplash.com/photo-1515694346937-2d5ecba82f76?w=400&h=300&fit=crop' },
-      { id: 's5', name: 'Acai Powder', description: 'Antioxidant-rich superfruit.', price: '16.99', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop' },
-      { id: 's6', name: 'Wheatgrass Powder', description: 'Alkalizing and nutrient boost.', price: '12.99', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop' }
-    ],
-    herbs: [
-      { id: 'h1', name: 'Turmeric Curcumin', description: 'Anti-inflammatory, with black pepper.', price: '15.99', image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop' },
-      { id: 'h2', name: 'Ashwagandha KSM-66', description: 'Stress and sleep support.', price: '21.99', image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop' },
-      { id: 'h3', name: 'Ginger Root Capsules', description: 'Digestion and nausea relief.', price: '9.99', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop' },
-      { id: 'h4', name: 'Echinacea Drops', description: 'Immune support, alcohol-free.', price: '13.49', image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop' },
-      { id: 'h5', name: 'Milk Thistle', description: 'Liver and detox support.', price: '11.99', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop' },
-      { id: 'h6', name: 'Valerian Root', description: 'Calm and restful sleep.', price: '10.99', image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop' }
-    ],
-    snacks: [
-      { id: 'n1', name: 'Mixed Nuts 500g', description: 'Almonds, cashews, walnuts, no added salt.', price: '8.99', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop' },
-      { id: 'n2', name: 'Protein Bar Box (12)', description: 'Chocolate, 20g protein each.', price: '24.99', image: 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop' },
-      { id: 'n3', name: 'Dried Fruit Mix', description: 'Apricots, dates, cranberries.', price: '7.49', image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&h=300&fit=crop' },
-      { id: 'n4', name: 'Seeds & Goji Trail Mix', description: 'Pumpkin, sunflower, goji berries.', price: '9.99', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop' },
-      { id: 'n5', name: 'Rice Cakes Multigrain', description: 'Light, low-sodium, 6-pack.', price: '3.99', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop' },
-      { id: 'n6', name: 'Nut Butter Jar', description: 'Almond or cashew, no sugar added.', price: '11.99', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop' }
-    ],
-    beauty: [
-      { id: 'b1', name: 'Marine Collagen', description: 'Skin, hair, and nail support.', price: '28.99', image: 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=400&h=300&fit=crop' },
-      { id: 'b2', name: 'Biotin 5000mcg', description: 'Hair and nail strength.', price: '8.99', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop' },
-      { id: 'b3', name: 'Vitamin E Oil', description: 'Skin and antioxidant support.', price: '12.99', image: 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=400&h=300&fit=crop' },
-      { id: 'b4', name: 'Hyaluronic Acid', description: 'Skin hydration and elasticity.', price: '16.99', image: 'https://images.unsplash.com/photo-1550572017-edd951aa1ee5?w=400&h=300&fit=crop' },
-      { id: 'b5', name: 'Evening Primrose Oil', description: 'Skin and hormonal balance.', price: '14.49', image: 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=400&h=300&fit=crop' },
-      { id: 'b6', name: 'Silica Complex', description: 'Hair, skin, and bones.', price: '13.99', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop' }
+    glutes: [
+      ['hip_thrust', 'glute_bridge', 'cable_kickback'],
+      ['barbell_squat', 'lunges', 'glute_bridge'],
+      ['hip_thrust', 'cable_kickback', 'deadlift'],
+      ['glute_bridge', 'lunges', 'hip_thrust'],
+      ['barbell_squat', 'hip_thrust', 'cable_kickback'],
+      ['lunges', 'glute_bridge'],
+      []
     ]
   };
+
+  function getWorkoutForDay(goal, dayIndex) {
+    var plan = WEEKLY_WORKOUT_PLANS[goal];
+    if (!plan) plan = WEEKLY_WORKOUT_PLANS.reduce_weight;
+    var ids = plan[dayIndex] || [];
+    return ids.map(function (id) {
+      var ex = EXERCISE_LIBRARY[id];
+      return ex ? { id: id, name: ex.name, image: ex.image, duration: ex.duration, videoUrl: ex.videoUrl || '' } : null;
+    }).filter(Boolean);
+  }
+
+  /* Registered shops – only Eastnat. productUrl opens in new tab (e.g. Instagram). */
+  var REGISTERED_SHOPS = [
+    { id: 'eastnat', name: 'Eastnat', description: 'Organic materials and natural products.', image: 'https://tse2.mm.bing.net/th/id/OIP.c7GhEgzB0C0oPeS44JiuKAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3', productUrl: 'https://www.instagram.com/eastnat/' }
+  ];
 
   var RECIPES = {
     'oatmeal with berries': { title: 'Oatmeal with berries', ingredients: ['Rolled oats', 'Milk or water', 'Mixed berries (fresh or frozen)', 'Honey or maple syrup', 'Pinch of salt'], steps: ['Bring liquid to a boil, add oats and salt. Simmer 5 min.', 'Stir in berries. Top with extra berries and drizzle of honey.'] },
@@ -159,6 +168,7 @@
     var panel = document.getElementById(section);
     if (panel) panel.classList.add('active');
     if (section === 'shop') showShopMain();
+    if (section === 'todos' && typeof renderWorkout === 'function') renderWorkout();
     document.querySelectorAll('.bottom-nav-item').forEach(function (item) {
       if (item.getAttribute('data-section') === section) item.setAttribute('aria-current', 'page');
       else item.removeAttribute('aria-current');
@@ -214,8 +224,14 @@
         var name = (document.getElementById('profilePageName').value || '').trim();
         var countryEl = document.getElementById('profilePageCountry');
         var country = countryEl ? countryEl.value : '';
+        var goalEl = document.getElementById('profilePageFitnessGoal');
+        var goal = goalEl ? goalEl.value : '';
+        var apiKeyEl = document.getElementById('profilePageExerciseApiKey');
+        var apiKey = apiKeyEl ? apiKeyEl.value : '';
         setUserName(name);
         setUserCountry(country);
+        setFitnessGoal(goal);
+        setExerciseApiKey(apiKey);
         updateProfileLabel(name);
         updateWelcomeText(name);
       });
@@ -339,6 +355,7 @@
 
   function renderTodoList() {
     const list = document.getElementById('todoList');
+    if (!list) return;
     const filter = getTodoFilter();
     const todos = getTodos();
     const today = new Date().toDateString();
@@ -452,19 +469,23 @@
   }
 
   function initTodos() {
-    document.getElementById('addTodoBtn').addEventListener('click', function () {
-      const input = document.getElementById('todoInput');
-      const due = document.getElementById('todoDue');
-      const text = input.value.trim();
-      if (!text) return;
-      addTodo(text, due.value || null);
-      input.value = '';
-      due.value = '';
-    });
+    var addBtn = document.getElementById('addTodoBtn');
+    if (addBtn) {
+      addBtn.addEventListener('click', function () {
+        const input = document.getElementById('todoInput');
+        const due = document.getElementById('todoDue');
+        const text = input && input.value ? input.value.trim() : '';
+        if (!text) return;
+        addTodo(text, due && due.value ? due.value : null);
+        if (input) input.value = '';
+        if (due) due.value = '';
+      });
+    }
     var shoppingBtn = document.getElementById('generateShoppingListBtn');
     if (shoppingBtn) shoppingBtn.addEventListener('click', generateShoppingListFromMealPlan);
-    document.getElementById('todoInput').addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') document.getElementById('addTodoBtn').click();
+    var todoInput = document.getElementById('todoInput');
+    if (todoInput) todoInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && addBtn) addBtn.click();
     });
     document.querySelectorAll('.filter-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -473,8 +494,312 @@
         renderTodoList();
       });
     });
-    renderTodoList();
+    var listEl = document.getElementById('todoList');
+    if (listEl) renderTodoList();
     renderDashboardTodos();
+  }
+
+  var workoutTimerInterval = null;
+  var selectedWorkoutDate = null;
+  var exerciseGifCache = {};
+
+  function getWorkoutCalendarMonthOffset() {
+    var n = localStorage.getItem('zara_workout_calendar_month_offset');
+    return n === null ? 0 : parseInt(n, 10);
+  }
+
+  function setWorkoutCalendarMonthOffset(delta) {
+    var next = getWorkoutCalendarMonthOffset() + delta;
+    localStorage.setItem('zara_workout_calendar_month_offset', String(next));
+    renderWorkoutCalendarMonthLabel();
+    renderWorkoutCalendar();
+  }
+
+  function getWorkoutDisplayMonthDate() {
+    var now = new Date();
+    var y = now.getFullYear();
+    var m = now.getMonth() + getWorkoutCalendarMonthOffset();
+    var year = y + Math.floor(m / 12);
+    var month = ((m % 12) + 12) % 12;
+    return new Date(year, month, 1);
+  }
+
+  function getYouTubeSearchUrl(exerciseName) {
+    return 'https://www.youtube.com/results?search_query=' + encodeURIComponent(exerciseName + ' workout form');
+  }
+
+  function fetchExerciseGif(exerciseName, callback) {
+    var key = getExerciseApiKey();
+    if (!key || !exerciseName) { if (callback) callback(null); return; }
+    var cached = exerciseGifCache[exerciseName.toLowerCase()];
+    if (cached !== undefined) { if (callback) callback(cached); return; }
+    var nameSlug = exerciseName.replace(/\s+/g, '%20');
+    fetch('https://exercisedb.p.rapidapi.com/exercises/name/' + nameSlug, {
+      headers: { 'X-RapidAPI-Key': key, 'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com' }
+    }).then(function (res) { return res.ok ? res.json() : []; }).then(function (arr) {
+      var id = Array.isArray(arr) && arr[0] && arr[0].id ? arr[0].id : null;
+      var imgUrl = null;
+      if (id) imgUrl = 'https://exercisedb.p.rapidapi.com/image?exerciseId=' + id + '&resolution=360&rapidapi-key=' + encodeURIComponent(key);
+      exerciseGifCache[exerciseName.toLowerCase()] = imgUrl;
+      if (callback) callback(imgUrl);
+    }).catch(function () {
+      exerciseGifCache[exerciseName.toLowerCase()] = null;
+      if (callback) callback(null);
+    });
+  }
+
+  function renderWorkoutCalendarMonthLabel() {
+    var d = getWorkoutDisplayMonthDate();
+    var el = document.getElementById('workoutMonthLabel');
+    if (el) el.textContent = d.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+  }
+
+  function renderWorkoutCalendar() {
+    var grid = document.getElementById('workoutCalendarGrid');
+    if (!grid) return;
+    var first = getWorkoutDisplayMonthDate();
+    var year = first.getFullYear();
+    var month = first.getMonth();
+    var firstDay = new Date(year, month, 1);
+    var lastDay = new Date(year, month + 1, 0);
+    var startWeekday = firstDay.getDay();
+    var daysInMonth = lastDay.getDate();
+    var todayStr = new Date().toISOString().slice(0, 10);
+    var goal = getFitnessGoal();
+    grid.innerHTML = '';
+    for (var i = 0; i < startWeekday; i++) {
+      var empty = document.createElement('div');
+      empty.className = 'workout-calendar-cell workout-calendar-cell-empty';
+      empty.setAttribute('aria-hidden', 'true');
+      grid.appendChild(empty);
+    }
+    for (var d = 1; d <= daysInMonth; d++) {
+      var date = new Date(year, month, d);
+      var dateStr = date.toISOString().slice(0, 10);
+      var isToday = dateStr === todayStr;
+      var dayIndex = date.getDay();
+      var exercises = goal ? getWorkoutForDay(goal, dayIndex) : [];
+      var hasWorkout = exercises.length > 0;
+      var cell = document.createElement('button');
+      cell.type = 'button';
+      cell.className = 'workout-calendar-cell workout-calendar-cell-day' + (isToday ? ' workout-calendar-cell-today' : '') + (hasWorkout ? ' has-workout' : '');
+      cell.setAttribute('data-date', dateStr);
+      cell.innerHTML = '<span class="workout-calendar-day-num">' + d + '</span>' + (hasWorkout ? '<span class="workout-calendar-badge">' + exercises.length + '</span>' : '');
+      cell.addEventListener('click', function () {
+        var dt = this.getAttribute('data-date');
+        selectedWorkoutDate = dt;
+        renderWorkoutDayDetail(dt);
+        var panel = document.getElementById('workoutDayDetailPanel');
+        if (panel) panel.classList.remove('hidden');
+      });
+      grid.appendChild(cell);
+    }
+  }
+
+  function renderWorkoutDayDetail(dateStr) {
+    var titleEl = document.getElementById('workoutDayDetailTitle');
+    var containerEl = document.getElementById('workoutDayDetailExercises');
+    if (!titleEl || !containerEl) return;
+    var d = new Date(dateStr + 'T12:00:00');
+    var dayIndex = d.getDay();
+    var label = d.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
+    titleEl.textContent = 'Workout for ' + label;
+    var goal = getFitnessGoal();
+    var list = goal ? getWorkoutForDay(goal, dayIndex) : [];
+    if (list.length === 0) {
+      containerEl.innerHTML = '<p class="workout-empty">Rest day. No exercises planned for this day.</p>';
+      return;
+    }
+    containerEl.innerHTML = list.map(function (ex, idx) {
+      var ytUrl = getYouTubeSearchUrl(ex.name);
+      var mediaHtml;
+      var videoUrl = (ex.videoUrl || '').trim();
+      if (videoUrl) {
+        mediaHtml = '<video class="workout-card-media workout-card-video" poster="' + escapeHtml(ex.image || '') + '" muted loop playsinline preload="metadata" aria-label="' + escapeHtml(ex.name) + '"><source src="' + escapeHtml(videoUrl) + '" type="video/mp4"></video>';
+      } else {
+        mediaHtml = '<img class="workout-card-media" src="' + (ex.image || '') + '" alt="" data-ex-name="' + escapeHtml(ex.name) + '" loading="lazy" onerror="this.onerror=null;this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%233d4048%22 width=%22400%22 height=%22300%22/%3E%3Ctext fill=%22%239ca3af%22 font-size=%2216%22 x=%22200%22 y=%22150%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22%3EExercise%3C/text%3E%3C/svg%3E\';" />';
+      }
+      return '<article class="workout-card workout-day-detail-card" data-idx="' + idx + '" data-ex-id="' + escapeHtml(ex.id || '') + '">' +
+        '<div class="workout-card-image">' + mediaHtml + '</div>' +
+        '<p class="workout-card-name">' + escapeHtml(ex.name) + '</p>' +
+        '<p class="workout-card-meta">' + ex.duration + ' sec</p>' +
+        '<button type="button" class="btn btn-ghost workout-view-detail" data-ex-id="' + escapeHtml(ex.id || '') + '">View</button>' +
+        '<a href="' + ytUrl + '" target="_blank" rel="noopener" class="btn btn-secondary workout-watch-video">Watch video</a>' +
+        '<div class="workout-card-timer hidden" aria-live="polite"></div>' +
+        '<button type="button" class="btn btn-primary workout-start-btn" data-idx="' + idx + '">Start timer</button>' +
+        '</article>';
+    }).join('');
+    containerEl.querySelectorAll('.workout-view-detail').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-ex-id');
+        if (id) goToExerciseDetail(id);
+      });
+    });
+    list.forEach(function (ex, idx) {
+      fetchExerciseGif(ex.name, function (gifUrl) {
+        if (!gifUrl) return;
+        var img = containerEl.querySelector('.workout-card[data-idx="' + idx + '"] .workout-card-image img');
+        if (img) img.src = gifUrl;
+      });
+    });
+    containerEl.querySelectorAll('.workout-start-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var idx = parseInt(btn.getAttribute('data-idx'), 10);
+        var card = containerEl.querySelector('.workout-card[data-idx="' + idx + '"]');
+        if (!card || !list[idx]) return;
+        var duration = list[idx].duration;
+        var timerEl = card.querySelector('.workout-card-timer');
+        var btnLabel = btn;
+        if (workoutTimerInterval) clearInterval(workoutTimerInterval);
+        if (timerEl) timerEl.classList.remove('hidden');
+        var secsLeft = duration;
+        function tick() {
+          if (secsLeft <= 0) {
+            clearInterval(workoutTimerInterval);
+            workoutTimerInterval = null;
+            if (timerEl) { timerEl.textContent = 'Done!'; timerEl.classList.add('workout-timer-done'); }
+            btnLabel.textContent = 'Start timer';
+            return;
+          }
+          if (timerEl) timerEl.textContent = secsLeft + ' s';
+          secsLeft--;
+        }
+        tick();
+        workoutTimerInterval = setInterval(tick, 1000);
+        btnLabel.textContent = 'Running…';
+      });
+    });
+  }
+
+  function renderWorkout() {
+    var goal = getFitnessGoal();
+    var hintEl = document.getElementById('workoutGoalHint');
+    var contentEl = document.getElementById('workoutContent');
+    var grid = document.getElementById('workoutCalendarGrid');
+    if (!grid) return;
+    if (!goal) {
+      if (hintEl) hintEl.classList.remove('hidden');
+      if (contentEl) contentEl.classList.add('hidden');
+      return;
+    }
+    if (hintEl) hintEl.classList.add('hidden');
+    if (contentEl) contentEl.classList.remove('hidden');
+    renderWorkoutCalendarMonthLabel();
+    renderWorkoutCalendar();
+  }
+
+  function initWorkout() {
+    renderWorkout();
+    var monthPrev = document.getElementById('workoutMonthPrev');
+    var monthNext = document.getElementById('workoutMonthNext');
+    if (monthPrev) monthPrev.addEventListener('click', function () { setWorkoutCalendarMonthOffset(-1); });
+    if (monthNext) monthNext.addEventListener('click', function () { setWorkoutCalendarMonthOffset(1); });
+    var closeBtn = document.getElementById('workoutDayDetailClose');
+    if (closeBtn) closeBtn.addEventListener('click', function () {
+      var panel = document.getElementById('workoutDayDetailPanel');
+      if (panel) panel.classList.add('hidden');
+      selectedWorkoutDate = null;
+    });
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden' && workoutTimerInterval) {
+        clearInterval(workoutTimerInterval);
+        workoutTimerInterval = null;
+      }
+    });
+  }
+
+  /* ----- Exercise detail page (premium single-exercise view) ----- */
+  function getExerciseById(id) {
+    return (id && EXERCISE_LIBRARY[id]) ? EXERCISE_LIBRARY[id] : null;
+  }
+
+  function goToExerciseDetail(exerciseId) {
+    if (!exerciseId || !getExerciseById(exerciseId)) return;
+    renderExerciseDetail(exerciseId);
+    goToSection('exerciseDetail');
+    document.body.classList.add('exercise-detail-open');
+  }
+
+  function renderExerciseDetail(exerciseId) {
+    var ex = getExerciseById(exerciseId);
+    if (!ex) return;
+    var nameEl = document.getElementById('exDetailName');
+    var targetText = document.getElementById('exDetailTargetText');
+    var equipmentText = document.getElementById('exDetailEquipmentText');
+    var difficultyText = document.getElementById('exDetailDifficultyText');
+    var durationEl = document.getElementById('exDetailDuration');
+    var stepsEl = document.getElementById('exDetailSteps');
+    var stepsEmpty = document.getElementById('exDetailStepsEmpty');
+    var muscleBadges = document.getElementById('exDetailMuscleBadges');
+    var videoSrc = document.getElementById('exDetailVideoSource');
+    var videoEl = document.getElementById('exDetailVideo');
+    var skeleton = document.getElementById('exDetailVideoSkeleton');
+    var videoContainer = document.getElementById('exDetailVideoContainer');
+    var placeholder = '—';
+    if (nameEl) nameEl.textContent = ex.name || placeholder;
+    if (targetText) targetText.textContent = ex.targetMuscle || placeholder;
+    if (equipmentText) equipmentText.textContent = ex.equipment || placeholder;
+    if (difficultyText) difficultyText.textContent = ex.difficulty || placeholder;
+    if (durationEl) durationEl.textContent = (ex.duration ? ex.duration + ' sec' : '') + (ex.duration ? ' per set' : '');
+    var instructions = Array.isArray(ex.instructions) ? ex.instructions : [];
+    if (stepsEl) {
+      stepsEl.innerHTML = instructions.map(function (step) { return '<li>' + escapeHtml(step) + '</li>'; }).join('');
+      stepsEl.classList.toggle('hidden', instructions.length === 0);
+    }
+    if (stepsEmpty) stepsEmpty.classList.toggle('hidden', instructions.length > 0);
+    var muscles = [].concat(ex.targetMuscle ? [ex.targetMuscle] : [], Array.isArray(ex.secondaryMuscles) ? ex.secondaryMuscles : []);
+    muscles = muscles.filter(Boolean);
+    if (muscleBadges) {
+      muscleBadges.innerHTML = muscles.map(function (m) { return '<span class="ex-detail-muscle-pill">' + escapeHtml(m) + '</span>'; }).join('');
+    }
+    var videoUrl = (ex.videoUrl || '').trim();
+    var videoContainer = document.getElementById('exDetailVideoContainer');
+    var placeholderBox = document.getElementById('exDetailVideoPlaceholder');
+    var placeholderImg = document.getElementById('exDetailVideoPlaceholderImg');
+    if (videoSrc) videoSrc.src = videoUrl;
+    if (videoContainer) videoContainer.classList.toggle('hidden', !videoUrl);
+    if (placeholderBox) placeholderBox.classList.toggle('hidden', !!videoUrl);
+    if (placeholderImg && ex.image) placeholderImg.src = ex.image;
+    if (skeleton) {
+      skeleton.classList.remove('hidden');
+      if (videoUrl) {
+        videoEl && videoEl.addEventListener('loadeddata', function onLoad() {
+          skeleton.classList.add('hidden');
+        }, { once: true });
+        setTimeout(function () { skeleton.classList.add('hidden'); }, 4000);
+      } else {
+        setTimeout(function () { skeleton.classList.add('hidden'); }, 600); }
+    }
+    if (videoUrl && videoEl) videoEl.load();
+  }
+
+  function initExerciseDetail() {
+    var backBtn = document.getElementById('exerciseDetailBack');
+    if (backBtn) backBtn.addEventListener('click', function () { document.body.classList.remove('exercise-detail-open'); goToSection('todos'); });
+    var playBtn = document.getElementById('exDetailPlayPause');
+    var muteBtn = document.getElementById('exDetailMute');
+    var videoEl = document.getElementById('exDetailVideo');
+    if (playBtn && videoEl) {
+      playBtn.addEventListener('click', function () {
+        if (videoEl.paused) { videoEl.play(); playBtn.setAttribute('aria-label', 'Pause'); playBtn.classList.add('is-playing'); }
+        else { videoEl.pause(); playBtn.setAttribute('aria-label', 'Play'); playBtn.classList.remove('is-playing'); }
+      });
+      videoEl.addEventListener('play', function () { playBtn.classList.add('is-playing'); });
+      videoEl.addEventListener('pause', function () { playBtn.classList.remove('is-playing'); });
+    }
+    if (muteBtn && videoEl) {
+      muteBtn.addEventListener('click', function () {
+        videoEl.muted = !videoEl.muted;
+        muteBtn.classList.toggle('is-muted', videoEl.muted);
+        muteBtn.setAttribute('aria-label', videoEl.muted ? 'Unmute' : 'Mute');
+      });
+    }
+    var startBtn = document.getElementById('exDetailStartBtn');
+    var addBtn = document.getElementById('exDetailAddToWorkout');
+    var favBtn = document.getElementById('exDetailFavorite');
+    if (startBtn) startBtn.addEventListener('click', function () { /* Start exercise / timer – could open timer or same as workout Start timer */ });
+    if (addBtn) addBtn.addEventListener('click', function () { goToSection('todos'); });
+    if (favBtn) favBtn.addEventListener('click', function () { favBtn.classList.toggle('is-saved'); favBtn.setAttribute('aria-label', favBtn.classList.contains('is-saved') ? 'Unsave' : 'Save or favorite'); });
   }
 
   /* ----- Notifications (reminders) ----- */
@@ -954,6 +1279,22 @@
     return localStorage.getItem(STORAGE_KEYS.userCountry) || '';
   }
 
+  function getFitnessGoal() {
+    return localStorage.getItem(STORAGE_KEYS.fitnessGoal) || '';
+  }
+
+  function setFitnessGoal(goal) {
+    localStorage.setItem(STORAGE_KEYS.fitnessGoal, (goal || '').trim());
+  }
+
+  function getExerciseApiKey() {
+    return localStorage.getItem(STORAGE_KEYS.exerciseApiKey) || '';
+  }
+
+  function setExerciseApiKey(key) {
+    localStorage.setItem(STORAGE_KEYS.exerciseApiKey, (key || '').trim());
+  }
+
   function setUserCountry(code) {
     localStorage.setItem(STORAGE_KEYS.userCountry, (code || '').trim());
   }
@@ -1137,8 +1478,12 @@
   function fillProfilePage() {
     var nameEl = document.getElementById('profilePageName');
     var countryEl = document.getElementById('profilePageCountry');
+    var goalEl = document.getElementById('profilePageFitnessGoal');
+    var apiKeyEl = document.getElementById('profilePageExerciseApiKey');
     if (nameEl) nameEl.value = getUserName();
     if (countryEl) countryEl.value = getUserCountry() || '';
+    if (goalEl) goalEl.value = getFitnessGoal() || '';
+    if (apiKeyEl) apiKeyEl.value = getExerciseApiKey() || '';
     updateProfileAvatarLetter(getUserName());
   }
   function updateWelcomeText(name) {
@@ -1328,79 +1673,41 @@
     }
   }
 
-  /* ----- Shop: own catalog, category detail page, search ----- */
-  var currentShopCategory = null;
+  /* ----- Shop: registered shops only (Eastnat) ----- */
+  function renderShopShops() {
+    var grid = document.getElementById('shopShopsGrid');
+    var section = document.getElementById('shopShopsSection');
+    if (!grid) return;
+    if (section) section.classList.toggle('hidden', REGISTERED_SHOPS.length === 0);
+    grid.innerHTML = REGISTERED_SHOPS.map(function (shop) {
+      return '<article class="shop-card shop-store-card" data-shop-id="' + escapeHtml(shop.id) + '">' +
+        '<div class="shop-card-image">' +
+          '<img src="' + (shop.image || '') + '" alt="" loading="lazy">' +
+          '<span class="shop-card-overlay" aria-hidden="true"></span>' +
+        '</div>' +
+        '<div class="shop-card-body">' +
+          '<h3 class="shop-store-name">' + escapeHtml(shop.name) + '</h3>' +
+          '<p class="shop-store-desc">' + escapeHtml(shop.description || '') + '</p>' +
+          '<button type="button" class="btn btn-primary shop-view-btn shop-store-view-btn" data-shop-id="' + escapeHtml(shop.id) + '">View products</button>' +
+        '</div></article>';
+    }).join('');
+    grid.querySelectorAll('.shop-store-view-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-shop-id');
+        var shop = REGISTERED_SHOPS.filter(function (s) { return s.id === id; })[0];
+        if (shop && shop.productUrl) window.open(shop.productUrl, '_blank', 'noopener,noreferrer');
+      });
+    });
+  }
 
   function showShopMain() {
     var main = document.getElementById('shopMain');
-    var detail = document.getElementById('shopCategoryDetail');
     if (main) main.classList.remove('hidden');
-    if (detail) detail.classList.add('hidden');
-    currentShopCategory = null;
-  }
-
-  function showShopCategory(categoryKey) {
-    var main = document.getElementById('shopMain');
-    var detail = document.getElementById('shopCategoryDetail');
-    var titleEl = document.getElementById('shopCategoryTitle');
-    var searchInput = document.getElementById('shopSearchInput');
-    if (!main || !detail || !SHOP_PRODUCTS[categoryKey]) return;
-    main.classList.add('hidden');
-    detail.classList.remove('hidden');
-    currentShopCategory = categoryKey;
-    if (titleEl) titleEl.textContent = SHOP_CATEGORY_LABELS[categoryKey] || categoryKey;
-    if (searchInput) searchInput.value = '';
-    renderShopProducts(categoryKey, '');
-  }
-
-  function renderShopProducts(categoryKey, searchQuery) {
-    var grid = document.getElementById('shopProductsGrid');
-    var noResults = document.getElementById('shopNoResults');
-    if (!grid) return;
-    var list = SHOP_PRODUCTS[categoryKey] || [];
-    var q = (searchQuery || '').toLowerCase().trim();
-    var filtered = q
-      ? list.filter(function (p) {
-          return (p.name && p.name.toLowerCase().indexOf(q) !== -1) ||
-                 (p.description && p.description.toLowerCase().indexOf(q) !== -1);
-        })
-      : list;
-    grid.innerHTML = filtered.map(function (p) {
-      return (
-        '<article class="shop-product-card" data-id="' + (p.id || '') + '">' +
-          '<div class="shop-product-image"><img src="' + (p.image || '') + '" alt="" loading="lazy"></div>' +
-          '<div class="shop-product-body">' +
-            '<h3 class="shop-product-name">' + escapeHtml(p.name) + '</h3>' +
-            '<p class="shop-product-desc">' + escapeHtml(p.description || '') + '</p>' +
-            '<p class="shop-product-price">$' + escapeHtml(String(p.price || '')) + '</p>' +
-            '<button type="button" class="btn btn-primary shop-add-btn">Add to order</button>' +
-          '</div></article>'
-      );
-    }).join('');
-    if (noResults) {
-      noResults.classList.toggle('hidden', filtered.length > 0);
-    }
+    renderShopShops();
   }
 
   function initShop() {
-    var backBtn = document.getElementById('shopBackBtn');
-    var searchInput = document.getElementById('shopSearchInput');
-    var searchBtn = document.getElementById('shopSearchBtn');
-    document.querySelectorAll('.shop-view-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var cat = btn.getAttribute('data-category');
-        if (cat) showShopCategory(cat);
-      });
-    });
-    if (backBtn) backBtn.addEventListener('click', showShopMain);
-    function doSearch() {
-      var q = searchInput ? searchInput.value.trim() : '';
-      if (currentShopCategory) renderShopProducts(currentShopCategory, q);
-    }
-    if (searchBtn) searchBtn.addEventListener('click', doSearch);
-    if (searchInput) {
-      searchInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); doSearch(); } });
-    }
+    /* Shop view is just Eastnat; View products opens productUrl (Instagram) in new tab – wired in renderShopShops() */
   }
 
   function initSplash() {
@@ -1474,6 +1781,8 @@
         var weight = weightEl && weightEl.value !== '' ? parseFloat(weightEl.value) : null;
         var heightEl = document.getElementById('gateSignUpHeight');
         var height = heightEl && heightEl.value !== '' ? parseFloat(heightEl.value) : null;
+        var goalEl = document.getElementById('gateSignUpFitnessGoal');
+        var fitnessGoal = (goalEl && goalEl.value) || '';
         try {
           var signupData = {
             name: name,
@@ -1483,11 +1792,13 @@
             age: isNaN(age) || age == null ? undefined : age,
             gender: gender || undefined,
             weight: (weight != null && !isNaN(weight)) ? weight : undefined,
-            height: (height != null && !isNaN(height)) ? height : undefined
+            height: (height != null && !isNaN(height)) ? height : undefined,
+            fitnessGoal: fitnessGoal || undefined
           };
           localStorage.setItem(STORAGE_KEYS.signup, JSON.stringify(signupData));
           setUserName(name);
           if (country) setUserCountry(country);
+          if (fitnessGoal) setFitnessGoal(fitnessGoal);
           updateProfileLabel(name);
           updateWelcomeText(name);
           enterMainApp();
@@ -1505,6 +1816,8 @@
     initProfile();
     initRecipeModal();
     initTodos();
+    initWorkout();
+    initExerciseDetail();
     initMealPlan();
     initFoodDiary();
     initChat();
