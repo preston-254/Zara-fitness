@@ -21,6 +21,66 @@
   const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const MEAL_SLOTS = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
 
+  var SHOP_CATEGORY_LABELS = {
+    vitamins: 'Vitamins & supplements',
+    protein: 'Protein & fitness',
+    superfoods: 'Superfoods & greens',
+    herbs: 'Herbs & natural health',
+    snacks: 'Healthy snacks',
+    beauty: 'Beauty & wellness'
+  };
+
+  var SHOP_PRODUCTS = {
+    vitamins: [
+      { id: 'v1', name: 'Daily Multivitamin', description: 'Complete A–Z with vitamins D3, B12, and folate.', price: '12.99', image: 'https://images.unsplash.com/photo-1550572017-edd951aa1ee5?w=400&h=300&fit=crop' },
+      { id: 'v2', name: 'Vitamin D3 1000 IU', description: 'Supports bone health and immunity.', price: '9.49', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop' },
+      { id: 'v3', name: 'Omega-3 Fish Oil', description: 'High EPA & DHA for heart and brain.', price: '18.99', image: 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=400&h=300&fit=crop' },
+      { id: 'v4', name: 'Vitamin C 1000mg', description: 'Antioxidant and immune support.', price: '7.99', image: 'https://images.unsplash.com/photo-1550572017-edd951aa1ee5?w=400&h=300&fit=crop' },
+      { id: 'v5', name: 'B-Complex', description: 'Energy and nervous system support.', price: '11.99', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop' },
+      { id: 'v6', name: 'Iron + Vitamin C', description: 'For healthy blood and energy.', price: '10.49', image: 'https://images.unsplash.com/photo-1550572017-edd951aa1ee5?w=400&h=300&fit=crop' }
+    ],
+    protein: [
+      { id: 'p1', name: 'Whey Protein Vanilla', description: '24g protein per serving, grass-fed.', price: '34.99', image: 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop' },
+      { id: 'p2', name: 'Plant Protein Chocolate', description: 'Pea & rice, 20g protein, vegan.', price: '29.99', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop' },
+      { id: 'p3', name: 'BCAA Recovery', description: '2:1:1 ratio, supports muscle recovery.', price: '24.99', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop' },
+      { id: 'p4', name: 'Pre-Workout Energy', description: 'Caffeine-free focus and endurance.', price: '27.99', image: 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop' },
+      { id: 'p5', name: 'Collagen Peptides', description: 'Unflavored, supports joints & skin.', price: '31.99', image: 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=400&h=300&fit=crop' },
+      { id: 'p6', name: 'Creatine Monohydrate', description: '5g per serving, supports strength.', price: '19.99', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop' }
+    ],
+    superfoods: [
+      { id: 's1', name: 'Spirulina Powder', description: 'Organic, nutrient-dense blue-green algae.', price: '22.99', image: 'https://images.unsplash.com/photo-1515694346937-2d5ecba82f76?w=400&h=300&fit=crop' },
+      { id: 's2', name: 'Greens Powder', description: 'Blend of kale, spinach, barley grass.', price: '26.99', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop' },
+      { id: 's3', name: 'Chlorella Tablets', description: 'Detox and immune support.', price: '18.99', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop' },
+      { id: 's4', name: 'Maca Powder', description: 'Energy and hormone balance.', price: '14.99', image: 'https://images.unsplash.com/photo-1515694346937-2d5ecba82f76?w=400&h=300&fit=crop' },
+      { id: 's5', name: 'Acai Powder', description: 'Antioxidant-rich superfruit.', price: '16.99', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop' },
+      { id: 's6', name: 'Wheatgrass Powder', description: 'Alkalizing and nutrient boost.', price: '12.99', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop' }
+    ],
+    herbs: [
+      { id: 'h1', name: 'Turmeric Curcumin', description: 'Anti-inflammatory, with black pepper.', price: '15.99', image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop' },
+      { id: 'h2', name: 'Ashwagandha KSM-66', description: 'Stress and sleep support.', price: '21.99', image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop' },
+      { id: 'h3', name: 'Ginger Root Capsules', description: 'Digestion and nausea relief.', price: '9.99', image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop' },
+      { id: 'h4', name: 'Echinacea Drops', description: 'Immune support, alcohol-free.', price: '13.49', image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop' },
+      { id: 'h5', name: 'Milk Thistle', description: 'Liver and detox support.', price: '11.99', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop' },
+      { id: 'h6', name: 'Valerian Root', description: 'Calm and restful sleep.', price: '10.99', image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=400&h=300&fit=crop' }
+    ],
+    snacks: [
+      { id: 'n1', name: 'Mixed Nuts 500g', description: 'Almonds, cashews, walnuts, no added salt.', price: '8.99', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop' },
+      { id: 'n2', name: 'Protein Bar Box (12)', description: 'Chocolate, 20g protein each.', price: '24.99', image: 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop' },
+      { id: 'n3', name: 'Dried Fruit Mix', description: 'Apricots, dates, cranberries.', price: '7.49', image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&h=300&fit=crop' },
+      { id: 'n4', name: 'Seeds & Goji Trail Mix', description: 'Pumpkin, sunflower, goji berries.', price: '9.99', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop' },
+      { id: 'n5', name: 'Rice Cakes Multigrain', description: 'Light, low-sodium, 6-pack.', price: '3.99', image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop' },
+      { id: 'n6', name: 'Nut Butter Jar', description: 'Almond or cashew, no sugar added.', price: '11.99', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop' }
+    ],
+    beauty: [
+      { id: 'b1', name: 'Marine Collagen', description: 'Skin, hair, and nail support.', price: '28.99', image: 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=400&h=300&fit=crop' },
+      { id: 'b2', name: 'Biotin 5000mcg', description: 'Hair and nail strength.', price: '8.99', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop' },
+      { id: 'b3', name: 'Vitamin E Oil', description: 'Skin and antioxidant support.', price: '12.99', image: 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=400&h=300&fit=crop' },
+      { id: 'b4', name: 'Hyaluronic Acid', description: 'Skin hydration and elasticity.', price: '16.99', image: 'https://images.unsplash.com/photo-1550572017-edd951aa1ee5?w=400&h=300&fit=crop' },
+      { id: 'b5', name: 'Evening Primrose Oil', description: 'Skin and hormonal balance.', price: '14.49', image: 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=400&h=300&fit=crop' },
+      { id: 'b6', name: 'Silica Complex', description: 'Hair, skin, and bones.', price: '13.99', image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop' }
+    ]
+  };
+
   var RECIPES = {
     'oatmeal with berries': { title: 'Oatmeal with berries', ingredients: ['Rolled oats', 'Milk or water', 'Mixed berries (fresh or frozen)', 'Honey or maple syrup', 'Pinch of salt'], steps: ['Bring liquid to a boil, add oats and salt. Simmer 5 min.', 'Stir in berries. Top with extra berries and drizzle of honey.'] },
     'ugali & sukuma wiki': { title: 'Ugali & sukuma wiki', ingredients: ['Maize flour', 'Kale or collard greens', 'Onion', 'Tomato', 'Oil', 'Salt'], steps: ['Sauté onion and tomato; add chopped greens and a little water. Cook until tender.', 'In another pot, boil water, add maize flour and stir until thick. Shape and serve with sukuma wiki.'] },
@@ -98,15 +158,26 @@
     document.querySelectorAll('.panel').forEach(function (p) { p.classList.remove('active'); });
     var panel = document.getElementById(section);
     if (panel) panel.classList.add('active');
+    if (section === 'shop') showShopMain();
+    document.querySelectorAll('.bottom-nav-item').forEach(function (item) {
+      if (item.getAttribute('data-section') === section) item.setAttribute('aria-current', 'page');
+      else item.removeAttribute('aria-current');
+    });
   }
 
   function initNav() {
-    document.querySelectorAll('.nav-btn, .link-more[data-section], .side-menu-link, .side-menu-logo').forEach(function (el) {
+    document.querySelectorAll('.nav-btn, .link-more[data-section], .side-menu-link, .side-menu-logo, .bottom-nav-item').forEach(function (el) {
       el.addEventListener('click', function (e) {
         e.preventDefault();
         var action = el.getAttribute('data-action');
         if (action === 'open-chat') {
           openChatSidebar();
+          closeSideMenu();
+          return;
+        }
+        if (action === 'open-signin') {
+          var signInModal = document.getElementById('signInModal');
+          if (signInModal) signInModal.hidden = false;
           closeSideMenu();
           return;
         }
@@ -129,15 +200,9 @@
     var backdrop = document.getElementById('chatSidebarBackdrop');
     if (sidebarClose) sidebarClose.addEventListener('click', closeChatSidebar);
     if (backdrop) backdrop.addEventListener('click', closeChatSidebar);
-    var menuToggle = document.getElementById('menuToggle');
     var sideMenu = document.getElementById('sideMenu');
     var sideMenuClose = document.getElementById('sideMenuClose');
     var sideMenuBackdrop = document.getElementById('sideMenuBackdrop');
-    if (menuToggle && sideMenu) {
-      menuToggle.addEventListener('click', function () {
-        if (sideMenu.classList.contains('is-open')) closeSideMenu(); else openSideMenu();
-      });
-    }
     if (sideMenuClose) sideMenuClose.addEventListener('click', closeSideMenu);
     if (sideMenuBackdrop) sideMenuBackdrop.addEventListener('click', closeSideMenu);
     var profileBtn = document.getElementById('profileBtn');
@@ -331,16 +396,12 @@
   }
 
   function renderDashboardTodos() {
-    const container = document.getElementById('dashboardTodoList');
+    const countEl = document.getElementById('dashboardTodoCount');
     const today = new Date().toDateString();
     const todos = getTodos().filter(function (t) {
       return !t.done && (!t.due || new Date(t.due).toDateString() <= today);
-    }).slice(0, 5);
-    container.innerHTML = todos.length
-      ? todos.map(function (t) {
-          return '<li>' + escapeHtml(t.text) + (t.due ? ' <small>(' + formatDue(t.due) + ')</small>' : '') + '</li>';
-        }).join('')
-      : '<li class="empty-state">Nothing due right now.</li>';
+    });
+    if (countEl) countEl.textContent = todos.length;
   }
 
   function generateShoppingListFromMealPlan() {
@@ -665,14 +726,13 @@
   }
 
   function renderDashboardMeals() {
-    const container = document.getElementById('dashboardMeals');
+    const countEl = document.getElementById('dashboardMealCount');
     const today = new Date().toISOString().slice(0, 10);
     const plan = getMealPlan();
-    const slots = MEAL_SLOTS.map(function (slot) {
-      const v = plan[mealPlanKey(today, slot)];
-      return v ? '<div class="meal-slot"><strong>' + escapeHtml(slot) + '</strong>: ' + escapeHtml(v) + '</div>' : '';
-    }).filter(Boolean);
-    container.innerHTML = slots.length ? slots.join('') : '<div class="empty-state">No meals planned for today. Add some in Meal Plan!</div>';
+    const count = MEAL_SLOTS.filter(function (slot) {
+      return (plan[mealPlanKey(today, slot)] || '').trim().length > 0;
+    }).length;
+    if (countEl) countEl.textContent = count;
   }
 
   function initMealPlan() {
@@ -1096,7 +1156,7 @@
       }
     });
     if (getUserName()) {
-      document.getElementById('welcomeName').textContent = getUserName() + ', here’s your day at a glance.';
+      var _w = document.getElementById('welcomeName'); if (_w) _w.textContent = getUserName() + ', here’s your day at a glance.';
     }
   }
 
@@ -1268,6 +1328,81 @@
     }
   }
 
+  /* ----- Shop: own catalog, category detail page, search ----- */
+  var currentShopCategory = null;
+
+  function showShopMain() {
+    var main = document.getElementById('shopMain');
+    var detail = document.getElementById('shopCategoryDetail');
+    if (main) main.classList.remove('hidden');
+    if (detail) detail.classList.add('hidden');
+    currentShopCategory = null;
+  }
+
+  function showShopCategory(categoryKey) {
+    var main = document.getElementById('shopMain');
+    var detail = document.getElementById('shopCategoryDetail');
+    var titleEl = document.getElementById('shopCategoryTitle');
+    var searchInput = document.getElementById('shopSearchInput');
+    if (!main || !detail || !SHOP_PRODUCTS[categoryKey]) return;
+    main.classList.add('hidden');
+    detail.classList.remove('hidden');
+    currentShopCategory = categoryKey;
+    if (titleEl) titleEl.textContent = SHOP_CATEGORY_LABELS[categoryKey] || categoryKey;
+    if (searchInput) searchInput.value = '';
+    renderShopProducts(categoryKey, '');
+  }
+
+  function renderShopProducts(categoryKey, searchQuery) {
+    var grid = document.getElementById('shopProductsGrid');
+    var noResults = document.getElementById('shopNoResults');
+    if (!grid) return;
+    var list = SHOP_PRODUCTS[categoryKey] || [];
+    var q = (searchQuery || '').toLowerCase().trim();
+    var filtered = q
+      ? list.filter(function (p) {
+          return (p.name && p.name.toLowerCase().indexOf(q) !== -1) ||
+                 (p.description && p.description.toLowerCase().indexOf(q) !== -1);
+        })
+      : list;
+    grid.innerHTML = filtered.map(function (p) {
+      return (
+        '<article class="shop-product-card" data-id="' + (p.id || '') + '">' +
+          '<div class="shop-product-image"><img src="' + (p.image || '') + '" alt="" loading="lazy"></div>' +
+          '<div class="shop-product-body">' +
+            '<h3 class="shop-product-name">' + escapeHtml(p.name) + '</h3>' +
+            '<p class="shop-product-desc">' + escapeHtml(p.description || '') + '</p>' +
+            '<p class="shop-product-price">$' + escapeHtml(String(p.price || '')) + '</p>' +
+            '<button type="button" class="btn btn-primary shop-add-btn">Add to order</button>' +
+          '</div></article>'
+      );
+    }).join('');
+    if (noResults) {
+      noResults.classList.toggle('hidden', filtered.length > 0);
+    }
+  }
+
+  function initShop() {
+    var backBtn = document.getElementById('shopBackBtn');
+    var searchInput = document.getElementById('shopSearchInput');
+    var searchBtn = document.getElementById('shopSearchBtn');
+    document.querySelectorAll('.shop-view-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var cat = btn.getAttribute('data-category');
+        if (cat) showShopCategory(cat);
+      });
+    });
+    if (backBtn) backBtn.addEventListener('click', showShopMain);
+    function doSearch() {
+      var q = searchInput ? searchInput.value.trim() : '';
+      if (currentShopCategory) renderShopProducts(currentShopCategory, q);
+    }
+    if (searchBtn) searchBtn.addEventListener('click', doSearch);
+    if (searchInput) {
+      searchInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); doSearch(); } });
+    }
+  }
+
   function initSplash() {
     var splash = document.getElementById('splashScreen');
     var gate = document.getElementById('authGate');
@@ -1374,6 +1509,7 @@
     initFoodDiary();
     initChat();
     initVoiceZara();
+    initShop();
     document.addEventListener('visibilitychange', onVisibilityChange);
     requestNotificationPermission();
     scheduleAllReminders();
