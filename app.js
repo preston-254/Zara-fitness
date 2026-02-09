@@ -1100,12 +1100,12 @@
     }
   }
 
-  /* ----- Voice: "Hey Zara, what's my meal today?" → spoken reply (Siri-style) ----- */
-  var voiceZaraRecognition = null;
+  /* ----- Voice: "Hey Zara" / "Hello Zara" → auto-detect, reply by voice (no button) ----- */
   var voiceZaraSpeaking = false;
   var wakeWordRecognition = null;
   var wakeWordRestartTimeout = null;
   var wakeWordJustResponded = false;
+  var wakeWordStarted = false;
 
   function isMainAppVisible() {
     var main = document.getElementById('mainApp');
@@ -1130,7 +1130,7 @@
 
   function normalizeVoiceCommand(transcript) {
     var t = (transcript || '').toLowerCase().trim();
-    t = t.replace(/^(hey\s+)?zara\s*,?\s*/i, '').trim();
+    t = t.replace(/^(hey\s+|hello\s+)?zara\s*,?\s*/i, '').trim();
     if (!t) t = 'help';
     return t;
   }
@@ -1166,18 +1166,14 @@
       }
       if (!transcript) return;
       var lower = transcript.toLowerCase().replace(/\s+/g, ' ');
-      if (!/hey\s*,?\s*zara/.test(lower)) return;
+      if (!/(hey|hello)\s*,?\s*zara/.test(lower)) return;
       wakeWordJustResponded = true;
       var command = normalizeVoiceCommand(transcript);
       var reply = getZaraReply(command);
       saveChatMessage('user', transcript);
       saveChatMessage('zara', reply);
       renderChatHistory();
-      setVoiceListening(true);
-      setTimeout(function () {
-        setVoiceListening(false);
-        speakWithZara(reply);
-      }, 200);
+      setTimeout(function () { speakWithZara(reply); }, 200);
       stopWakeWordListening();
     };
 
@@ -1203,79 +1199,31 @@
 
     try {
       wakeWordRecognition.start();
-    } catch (_) {}
+      wakeWordStarted = true;
+    } catch (err) {
+      wakeWordRecognition = null;
+      if (isMainAppVisible()) {
+        wakeWordRestartTimeout = setTimeout(function () {
+          wakeWordRestartTimeout = null;
+          startWakeWordListening();
+        }, 3000);
+      }
+    }
   }
 
-  function setVoiceListening(listening) {
-    var fab = document.getElementById('voiceZaraFab');
-    var mic = document.getElementById('chatMicBtn');
-    if (fab) fab.classList.toggle('listening', !!listening);
-    if (mic) mic.classList.toggle('listening', !!listening);
-  }
-
-  function startVoiceZara() {
+  function tryStartWakeWordOnUserGesture() {
+    if (wakeWordStarted || !isMainAppVisible()) return;
     var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      speakWithZara('Voice commands are not supported in this browser. Try Chrome or Edge.');
-      return;
-    }
-    stopWakeWordListening();
-    if (voiceZaraRecognition) {
-      try { voiceZaraRecognition.abort(); } catch (_) {}
-      voiceZaraRecognition = null;
-    }
-    voiceZaraRecognition = new SpeechRecognition();
-    voiceZaraRecognition.continuous = false;
-    voiceZaraRecognition.interimResults = false;
-    voiceZaraRecognition.lang = 'en-US';
-
-    voiceZaraRecognition.onstart = function () { setVoiceListening(true); };
-    voiceZaraRecognition.onend = function () {
-      setVoiceListening(false);
-      if (isMainAppVisible()) {
-        wakeWordRestartTimeout = setTimeout(function () {
-          wakeWordRestartTimeout = null;
-          startWakeWordListening();
-        }, 800);
-      }
-    };
-    voiceZaraRecognition.onerror = function () {
-      setVoiceListening(false);
-      if (isMainAppVisible()) {
-        wakeWordRestartTimeout = setTimeout(function () {
-          wakeWordRestartTimeout = null;
-          startWakeWordListening();
-        }, 800);
-      }
-    };
-
-    voiceZaraRecognition.onresult = function (event) {
-      setVoiceListening(false);
-      var transcript = '';
-      if (event.results && event.results.length) {
-        transcript = event.results[event.results.length - 1][0].transcript || '';
-      }
-      var command = normalizeVoiceCommand(transcript);
-      var reply = getZaraReply(command);
-      saveChatMessage('user', transcript.trim() || 'Hey Zara');
-      saveChatMessage('zara', reply);
-      renderChatHistory();
-      setTimeout(function () { speakWithZara(reply); }, 300);
-    };
-
-    try {
-      voiceZaraRecognition.start();
-    } catch (e) {
-      setVoiceListening(false);
-      speakWithZara('I couldn\'t start listening. Please try again.');
-    }
+    if (!SpeechRecognition) return;
+    startWakeWordListening();
   }
 
   function initVoiceZara() {
-    var fab = document.getElementById('voiceZaraFab');
-    var mic = document.getElementById('chatMicBtn');
-    if (fab) fab.addEventListener('click', startVoiceZara);
-    if (mic) mic.addEventListener('click', startVoiceZara);
+    var main = document.getElementById('mainApp');
+    if (main) {
+      main.addEventListener('click', tryStartWakeWordOnUserGesture, { once: true, capture: true });
+      main.addEventListener('touchstart', tryStartWakeWordOnUserGesture, { once: true, capture: true, passive: true });
+    }
     if (typeof speechSynthesis !== 'undefined' && speechSynthesis.getVoices().length === 0) {
       speechSynthesis.addEventListener('voiceschanged', function () {});
     }
@@ -1301,7 +1249,7 @@
     var main = document.getElementById('mainApp');
     if (gate) gate.hidden = true;
     if (main) main.classList.remove('hidden');
-    setTimeout(function () { startWakeWordListening(); }, 1200);
+    setTimeout(function () { tryStartWakeWordOnUserGesture(); }, 100);
   }
 
   function onVisibilityChange() {
