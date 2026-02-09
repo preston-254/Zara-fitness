@@ -1130,7 +1130,7 @@
 
   function normalizeVoiceCommand(transcript) {
     var t = (transcript || '').toLowerCase().trim();
-    t = t.replace(/^(hey\s+|hello\s+)?zara\s*,?\s*/i, '').trim();
+    t = t.replace(/^(hey\s+|hello\s+)?(zara|xara)\s*,?\s*/i, '').trim();
     if (!t) t = 'help';
     return t;
   }
@@ -1166,7 +1166,7 @@
       }
       if (!transcript) return;
       var lower = transcript.toLowerCase().replace(/\s+/g, ' ');
-      if (!/(hey|hello)\s*,?\s*zara/.test(lower)) return;
+      if (!/(hey|hello)\s*,?\s*(zara|xara)/.test(lower)) return;
       wakeWordJustResponded = true;
       var command = normalizeVoiceCommand(transcript);
       var reply = getZaraReply(command);
@@ -1229,6 +1229,14 @@
     }
   }
 
+  function startWakeWordWhenReady() {
+    if (!isMainAppVisible()) return;
+    if (wakeWordRecognition) return;
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
+    startWakeWordListening();
+  }
+
   function escapeHtml(s) {
     if (!s) return '';
     const div = document.createElement('div');
@@ -1249,14 +1257,14 @@
     var main = document.getElementById('mainApp');
     if (gate) gate.hidden = true;
     if (main) main.classList.remove('hidden');
-    setTimeout(function () { tryStartWakeWordOnUserGesture(); }, 100);
+    setTimeout(function () { startWakeWordWhenReady(); }, 400);
   }
 
   function onVisibilityChange() {
     if (document.hidden) {
       stopWakeWordListening();
     } else if (isMainAppVisible()) {
-      setTimeout(function () { startWakeWordListening(); }, 500);
+      setTimeout(function () { startWakeWordWhenReady(); }, 500);
     }
   }
 
