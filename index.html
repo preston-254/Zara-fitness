@@ -122,13 +122,8 @@
         <a href="#" class="logo" data-section="dashboard">Zara</a>
         <p class="tagline">Reminders & meal prep, with you.</p>
       </div>
-      <div class="header-actions">
-        <button type="button" class="profile-btn" id="profileBtn" title="Your profile">
-          <span class="profile-icon" aria-hidden="true"></span>
-          <span class="profile-label" id="profileLabel">Profile</span>
-        </button>
-      </div>
-      <!-- Profile modal -->
+      <!-- Profile: use side menu → Profile page (profile button removed) -->
+      <!-- Profile modal (still used if opened from elsewhere) -->
       <div id="profileModal" class="profile-modal" hidden>
         <div class="profile-modal-content">
           <h3>Your profile</h3>
@@ -261,11 +256,12 @@
             <p class="welcome-sub" id="welcomeName">Here’s your day at a glance.</p>
           </div>
         </div>
-        <div class="dashboard-grid">
-          <div class="card card-split today-todos">
+        <div class="taupe-banner"><span>Your reminders & meal prep, in one place.</span></div>
+        <div class="dashboard-grid dashboard-hero-cards">
+          <div class="card card-split card-hero today-todos">
             <div class="card-half-pic card-half-pic-todos">
-              <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=400&h=300&fit=crop" alt="" loading="lazy">
-              <span class="card-pic-fade" aria-hidden="true"></span>
+              <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600&h=400&fit=crop" alt="" loading="lazy">
+              <span class="card-pic-overlay card-pic-overlay-split" aria-hidden="true"></span>
             </div>
             <div class="card-half-note">
               <h2>Today’s to-dos</h2>
@@ -273,10 +269,10 @@
               <a href="#" class="link-more" data-section="todos">View all to-dos →</a>
             </div>
           </div>
-          <div class="card card-split today-meals">
+          <div class="card card-split card-hero today-meals">
             <div class="card-half-pic card-half-pic-meals">
-              <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop" alt="" loading="lazy">
-              <span class="card-pic-fade" aria-hidden="true"></span>
+              <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=400&fit=crop" alt="" loading="lazy">
+              <span class="card-pic-overlay card-pic-overlay-split" aria-hidden="true"></span>
             </div>
             <div class="card-half-note">
               <h2>Today’s meals</h2>
@@ -284,10 +280,10 @@
               <a href="#" class="link-more" data-section="mealplan">Edit meal plan →</a>
             </div>
           </div>
-          <div class="card card-split gym-finder">
+          <div class="card card-split card-hero gym-finder">
             <div class="card-half-pic card-half-pic-gym">
-              <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop" alt="" loading="lazy">
-              <span class="card-pic-fade" aria-hidden="true"></span>
+              <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop" alt="" loading="lazy">
+              <span class="card-pic-overlay card-pic-overlay-split" aria-hidden="true"></span>
             </div>
             <div class="card-half-note">
               <h2>Find a gym or health center near you</h2>
@@ -309,6 +305,7 @@
           <h1>To-Dos & Reminders</h1>
           <p class="section-desc">Zara will remind you so you don’t forget.</p>
         </div>
+        <div class="taupe-banner"><span>Stay on top of tasks and shopping.</span></div>
         <div class="todo-note">
           <div class="todo-note-margin" aria-hidden="true"></div>
           <div class="todo-note-paper">
@@ -387,6 +384,7 @@
             <h1>Food Diary</h1>
             <p class="section-desc">Add a photo of your meal. Zara will check it against your plan.</p>
           </div>
+          <div class="taupe-banner"><span>Log meals and get gentle feedback.</span></div>
           <div class="upload-zone" id="uploadZone">
           <input type="file" id="foodPhotoInput" accept="image/*" hidden>
           <p>Drop a photo here or click to upload</p>
@@ -403,6 +401,7 @@
           <h1>Your profile</h1>
           <p class="section-desc">Update your name and country so Zara can personalize your experience and meal plans.</p>
         </div>
+        <div class="taupe-banner"><span>Personalize reminders and meal suggestions.</span></div>
         <div class="profile-page-card">
           <div class="profile-page-avatar" aria-hidden="true">
             <span class="profile-avatar-inner" id="profileAvatarLetter">?</span>
@@ -440,6 +439,27 @@
         </div>
       </section>
     </main>
+
+    <footer class="app-footer" role="contentinfo">
+      <div class="app-footer-curve" aria-hidden="true"></div>
+      <div class="app-footer-inner">
+        <div class="app-footer-brand">
+          <span class="app-footer-logo">Zara</span>
+          <p class="app-footer-tagline">Reminders & meal prep, with you.</p>
+        </div>
+        <nav class="app-footer-nav" aria-label="Footer navigation">
+          <a href="#" class="link-more" data-section="dashboard">Dashboard</a>
+          <a href="#" class="link-more" data-section="todos">To-Dos</a>
+          <a href="#" class="link-more" data-section="mealplan">Meal Plan</a>
+          <a href="#" class="link-more" data-section="fooddiary">Food Diary</a>
+          <a href="#" class="link-more" data-section="profile">Profile</a>
+        </nav>
+        <p class="app-footer-verse">Plan healthy. Eat well. Stay on track.</p>
+        <div class="app-footer-bottom">
+          <span class="app-footer-copy">© Zara · Your companion for mindful days</span>
+        </div>
+      </div>
+    </footer>
   </div>
 
   <!-- Chat sidebar (slides in from the right) -->
@@ -448,6 +468,9 @@
     <div class="chat-sidebar-panel">
       <div class="chat-sidebar-header">
         <span class="chat-header-title">Zara</span>
+        <button type="button" class="chat-sidebar-mic" id="chatMicBtn" aria-label="Ask Zara with your voice" title="Say e.g. Hey Zara, what's my meal today?">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
         <button type="button" class="chat-sidebar-close" id="chatSidebarClose" aria-label="Close chat" title="Close">×</button>
       </div>
       <div class="chat-messages" id="chatMessages"></div>
@@ -461,6 +484,12 @@
   <!-- Floating chat icon (visible on every page) -->
   <button type="button" class="chat-fab" id="chatFab" aria-label="Chat with Zara" title="Chat with Zara">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  </button>
+
+  <!-- Voice command: "Hey Zara, what's my meal today?" → spoken reply -->
+  <button type="button" class="voice-fab" id="voiceZaraFab" aria-label="Ask Zara with your voice" title="Say: Hey Zara, what's my meal today?">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+    <span class="voice-fab-label">Ask Zara</span>
   </button>
 
   </div><!-- /#mainApp -->

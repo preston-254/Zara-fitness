@@ -1100,6 +1100,187 @@
     }
   }
 
+  /* ----- Voice: "Hey Zara, what's my meal today?" → spoken reply (Siri-style) ----- */
+  var voiceZaraRecognition = null;
+  var voiceZaraSpeaking = false;
+  var wakeWordRecognition = null;
+  var wakeWordRestartTimeout = null;
+  var wakeWordJustResponded = false;
+
+  function isMainAppVisible() {
+    var main = document.getElementById('mainApp');
+    return main && !main.classList.contains('hidden');
+  }
+
+  function speakWithZara(text) {
+    if (!text || typeof speechSynthesis === 'undefined') return;
+    speechSynthesis.cancel();
+    var forSpeech = text.replace(/\s*·\s*/g, ', ').replace(/\n+/g, '. ');
+    var u = new SpeechSynthesisUtterance(forSpeech);
+    u.rate = 0.95;
+    u.pitch = 1;
+    u.volume = 1;
+    var voices = speechSynthesis.getVoices();
+    var preferred = voices.filter(function (v) { return v.lang.startsWith('en'); });
+    if (preferred.length) u.voice = preferred[0];
+    u.onstart = function () { voiceZaraSpeaking = true; };
+    u.onend = u.onerror = function () { voiceZaraSpeaking = false; };
+    speechSynthesis.speak(u);
+  }
+
+  function normalizeVoiceCommand(transcript) {
+    var t = (transcript || '').toLowerCase().trim();
+    t = t.replace(/^(hey\s+)?zara\s*,?\s*/i, '').trim();
+    if (!t) t = 'help';
+    return t;
+  }
+
+  function stopWakeWordListening() {
+    if (wakeWordRestartTimeout) {
+      clearTimeout(wakeWordRestartTimeout);
+      wakeWordRestartTimeout = null;
+    }
+    if (wakeWordRecognition) {
+      try { wakeWordRecognition.abort(); } catch (_) {}
+      wakeWordRecognition = null;
+    }
+  }
+
+  function startWakeWordListening() {
+    if (!isMainAppVisible()) return;
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
+    if (wakeWordRecognition) return;
+    wakeWordRecognition = new SpeechRecognition();
+    wakeWordRecognition.continuous = true;
+    wakeWordRecognition.interimResults = true;
+    wakeWordRecognition.lang = 'en-US';
+
+    wakeWordRecognition.onresult = function (event) {
+      var transcript = '';
+      for (var i = event.results.length - 1; i >= 0; i--) {
+        if (event.results[i].isFinal) {
+          transcript = (event.results[i][0].transcript || '').trim();
+          break;
+        }
+      }
+      if (!transcript) return;
+      var lower = transcript.toLowerCase().replace(/\s+/g, ' ');
+      if (!/hey\s*,?\s*zara/.test(lower)) return;
+      wakeWordJustResponded = true;
+      var command = normalizeVoiceCommand(transcript);
+      var reply = getZaraReply(command);
+      saveChatMessage('user', transcript);
+      saveChatMessage('zara', reply);
+      renderChatHistory();
+      setVoiceListening(true);
+      setTimeout(function () {
+        setVoiceListening(false);
+        speakWithZara(reply);
+      }, 200);
+      stopWakeWordListening();
+    };
+
+    wakeWordRecognition.onend = function () {
+      wakeWordRecognition = null;
+      if (!isMainAppVisible()) return;
+      var delay = wakeWordJustResponded ? 2800 : (voiceZaraSpeaking ? 2500 : 600);
+      if (wakeWordJustResponded) wakeWordJustResponded = false;
+      wakeWordRestartTimeout = setTimeout(function () {
+        wakeWordRestartTimeout = null;
+        startWakeWordListening();
+      }, delay);
+    };
+
+    wakeWordRecognition.onerror = function (e) {
+      wakeWordRecognition = null;
+      if (!isMainAppVisible()) return;
+      wakeWordRestartTimeout = setTimeout(function () {
+        wakeWordRestartTimeout = null;
+        startWakeWordListening();
+      }, 2000);
+    };
+
+    try {
+      wakeWordRecognition.start();
+    } catch (_) {}
+  }
+
+  function setVoiceListening(listening) {
+    var fab = document.getElementById('voiceZaraFab');
+    var mic = document.getElementById('chatMicBtn');
+    if (fab) fab.classList.toggle('listening', !!listening);
+    if (mic) mic.classList.toggle('listening', !!listening);
+  }
+
+  function startVoiceZara() {
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      speakWithZara('Voice commands are not supported in this browser. Try Chrome or Edge.');
+      return;
+    }
+    stopWakeWordListening();
+    if (voiceZaraRecognition) {
+      try { voiceZaraRecognition.abort(); } catch (_) {}
+      voiceZaraRecognition = null;
+    }
+    voiceZaraRecognition = new SpeechRecognition();
+    voiceZaraRecognition.continuous = false;
+    voiceZaraRecognition.interimResults = false;
+    voiceZaraRecognition.lang = 'en-US';
+
+    voiceZaraRecognition.onstart = function () { setVoiceListening(true); };
+    voiceZaraRecognition.onend = function () {
+      setVoiceListening(false);
+      if (isMainAppVisible()) {
+        wakeWordRestartTimeout = setTimeout(function () {
+          wakeWordRestartTimeout = null;
+          startWakeWordListening();
+        }, 800);
+      }
+    };
+    voiceZaraRecognition.onerror = function () {
+      setVoiceListening(false);
+      if (isMainAppVisible()) {
+        wakeWordRestartTimeout = setTimeout(function () {
+          wakeWordRestartTimeout = null;
+          startWakeWordListening();
+        }, 800);
+      }
+    };
+
+    voiceZaraRecognition.onresult = function (event) {
+      setVoiceListening(false);
+      var transcript = '';
+      if (event.results && event.results.length) {
+        transcript = event.results[event.results.length - 1][0].transcript || '';
+      }
+      var command = normalizeVoiceCommand(transcript);
+      var reply = getZaraReply(command);
+      saveChatMessage('user', transcript.trim() || 'Hey Zara');
+      saveChatMessage('zara', reply);
+      renderChatHistory();
+      setTimeout(function () { speakWithZara(reply); }, 300);
+    };
+
+    try {
+      voiceZaraRecognition.start();
+    } catch (e) {
+      setVoiceListening(false);
+      speakWithZara('I couldn\'t start listening. Please try again.');
+    }
+  }
+
+  function initVoiceZara() {
+    var fab = document.getElementById('voiceZaraFab');
+    var mic = document.getElementById('chatMicBtn');
+    if (fab) fab.addEventListener('click', startVoiceZara);
+    if (mic) mic.addEventListener('click', startVoiceZara);
+    if (typeof speechSynthesis !== 'undefined' && speechSynthesis.getVoices().length === 0) {
+      speechSynthesis.addEventListener('voiceschanged', function () {});
+    }
+  }
+
   function escapeHtml(s) {
     if (!s) return '';
     const div = document.createElement('div');
@@ -1120,6 +1301,15 @@
     var main = document.getElementById('mainApp');
     if (gate) gate.hidden = true;
     if (main) main.classList.remove('hidden');
+    setTimeout(function () { startWakeWordListening(); }, 1200);
+  }
+
+  function onVisibilityChange() {
+    if (document.hidden) {
+      stopWakeWordListening();
+    } else if (isMainAppVisible()) {
+      setTimeout(function () { startWakeWordListening(); }, 500);
+    }
   }
 
   function initSplash() {
@@ -1227,6 +1417,8 @@
     initMealPlan();
     initFoodDiary();
     initChat();
+    initVoiceZara();
+    document.addEventListener('visibilitychange', onVisibilityChange);
     requestNotificationPermission();
     scheduleAllReminders();
   }
