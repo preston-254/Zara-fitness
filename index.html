@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Zara – Your Reminders & Meal Prep Companion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 1. Splash: plain page "Zuri" then fades away -->
+  <div id="splashScreen" class="splash-screen" aria-label="Loading">
+    <span class="splash-name">Zuri</span>
+  </div>
+
+  <!-- 2. Auth gate: sign in / sign up before main app (with floating health icons) -->
+  <div id="authGate" class="auth-gate" aria-label="Sign in or sign up" hidden>
+    <div class="auth-gate-icons" aria-hidden="true">
+      <div class="bg-icon bg-icon-1" title="Carrot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22L9 8l3-6 3 6-3 14z"/><path d="M9 8l2-3 2 3"/><path d="M13 8l2-3 2 3"/></svg></div>
+      <div class="bg-icon bg-icon-2" title="Dumbbell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h2v8H4z"/><path d="M18 8h2v8h-2z"/><path d="M8 6h8v12H8z"/><circle cx="6" cy="12" r="2"/><circle cx="18" cy="12" r="2"/></svg></div>
+      <div class="bg-icon bg-icon-3" title="Run"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2v4l3 3"/><path d="M18 12h-4l-2 8"/><path d="M6 12l-2 8"/><path d="M6 12h4l2-8 2 8h4"/><path d="M11 2v4l-3 3"/></svg></div>
+      <div class="bg-icon bg-icon-4" title="Carrot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22L9 8l3-6 3 6-3 14z"/><path d="M9 8l2-3 2 3"/><path d="M13 8l2-3 2 3"/></svg></div>
+      <div class="bg-icon bg-icon-5" title="Dumbbell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h2v8H4z"/><path d="M18 8h2v8h-2z"/><path d="M8 6h8v12H8z"/><circle cx="6" cy="12" r="2"/><circle cx="18" cy="12" r="2"/></svg></div>
+      <div class="bg-icon bg-icon-6" title="Run"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2v4l3 3"/><path d="M18 12h-4l-2 8"/><path d="M6 12l-2 8"/><path d="M6 12h4l2-8 2 8h4"/><path d="M11 2v4l-3 3"/></svg></div>
+    </div>
+    <div class="auth-gate-inner">
+      <h1 class="auth-gate-title">Welcome</h1>
+      <p class="auth-gate-subtitle">Sign in or create an account to get started.</p>
+      <div class="auth-gate-tabs">
+        <button type="button" class="auth-tab active" data-tab="signin">Sign in</button>
+        <button type="button" class="auth-tab" data-tab="signup">Sign up</button>
+      </div>
+      <div id="authGateSignIn" class="auth-gate-form">
+        <label for="gateSignInEmail">Email</label>
+        <input type="email" id="gateSignInEmail" placeholder="you@example.com" autocomplete="email">
+        <label for="gateSignInPassword">Password</label>
+        <input type="password" id="gateSignInPassword" placeholder="Password" autocomplete="current-password">
+        <button type="button" class="btn btn-primary auth-gate-btn" id="gateSignInSubmit">Sign in</button>
+      </div>
+      <div id="authGateSignUp" class="auth-gate-form hidden">
+        <label for="gateSignUpName">Display name</label>
+        <input type="text" id="gateSignUpName" placeholder="Your name" autocomplete="name">
+        <label for="gateSignUpEmail">Email</label>
+        <input type="email" id="gateSignUpEmail" placeholder="you@example.com" autocomplete="email">
+        <label for="gateSignUpPassword">Password</label>
+        <input type="password" id="gateSignUpPassword" placeholder="Choose a password" autocomplete="new-password">
+        <label for="gateSignUpCountry">Country</label>
+        <select id="gateSignUpCountry" aria-label="Your country">
+          <option value="">Select your country</option>
+          <option value="US">United States</option>
+          <option value="GB">United Kingdom</option>
+          <option value="KE">Kenya</option>
+          <option value="NG">Nigeria</option>
+          <option value="ZA">South Africa</option>
+          <option value="IN">India</option>
+          <option value="PK">Pakistan</option>
+          <option value="MX">Mexico</option>
+          <option value="BR">Brazil</option>
+          <option value="EG">Egypt</option>
+          <option value="GH">Ghana</option>
+          <option value="ET">Ethiopia</option>
+          <option value="TZ">Tanzania</option>
+          <option value="UG">Uganda</option>
+          <option value="CA">Canada</option>
+          <option value="AU">Australia</option>
+          <option value="FR">France</option>
+          <option value="DE">Germany</option>
+          <option value="JP">Japan</option>
+          <option value="CN">China</option>
+          <option value="OTHER">Other</option>
+        </select>
+        <label for="gateSignUpAge">Age</label>
+        <input type="number" id="gateSignUpAge" placeholder="e.g. 25" min="1" max="120" autocomplete="off">
+        <label for="gateSignUpGender">Gender</label>
+        <select id="gateSignUpGender" aria-label="Gender">
+          <option value="">Select</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+          <option value="prefer-not">Prefer not to say</option>
+        </select>
+        <label for="gateSignUpWeight">Weight (kg)</label>
+        <input type="number" id="gateSignUpWeight" placeholder="e.g. 70" min="1" max="500" step="0.1" autocomplete="off">
+        <label for="gateSignUpHeight">Height (ft)</label>
+        <input type="number" id="gateSignUpHeight" placeholder="e.g. 5.6" min="3" max="8" step="0.1" autocomplete="off">
+        <button type="button" class="btn btn-primary auth-gate-btn" id="gateSignUpSubmit">Sign up</button>
+      </div>
+      <button type="button" class="auth-gate-guest" id="gateContinueGuest">Continue as guest</button>
+    </div>
+  </div>
+
+  <!-- 3. Main app (hidden until after auth gate) -->
+  <div id="mainApp" class="main-app hidden">
+  <!-- Eat This Much–style background + animations -->
+  <div class="animated-bg" aria-hidden="true">
+    <div class="bg-base"></div>
+    <div class="bg-pattern"></div>
+    <div class="bg-blob bg-blob-1"></div>
+    <div class="bg-blob bg-blob-2"></div>
+    <div class="bg-blob bg-blob-3"></div>
+    <div class="bg-blob bg-blob-4"></div>
+    <div class="bg-blob bg-blob-5"></div>
+    <div class="bg-float bg-float-1"></div>
+    <div class="bg-float bg-float-2"></div>
+    <div class="bg-float bg-float-3"></div>
+  </div>
+  <!-- Top banner -->
+  <div class="top-banner">
+    <span class="banner-dot"></span>
+    <span>Your reminders & meal prep companion — plan healthy, stay on track</span>
+  </div>
+  <div class="app-wrap">
+    <header class="main-header">
+      <button type="button" class="menu-toggle" id="menuToggle" aria-label="Open menu" title="Menu" aria-expanded="false">
+        <span class="menu-toggle-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </span>
+      </button>
+      <div class="header-brand">
+        <a href="#" class="logo" data-section="dashboard">Zara</a>
+        <p class="tagline">Reminders & meal prep, with you.</p>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="profile-btn" id="profileBtn" title="Your profile">
+          <span class="profile-icon" aria-hidden="true"></span>
+          <span class="profile-label" id="profileLabel">Profile</span>
+        </button>
+      </div>
+      <!-- Profile modal -->
+      <div id="profileModal" class="profile-modal" hidden>
+        <div class="profile-modal-content">
+          <h3>Your profile</h3>
+          <p class="profile-hint">Set your name and country so Zara can personalize reminders and meal plans to your region.</p>
+          <label for="profileNameInput">Display name</label>
+          <input type="text" id="profileNameInput" placeholder="Enter your name" autocomplete="name">
+          <label for="profileCountrySelect">Country</label>
+          <select id="profileCountrySelect" aria-label="Your country for meal suggestions">
+            <option value="">Select your country</option>
+            <option value="US">United States</option>
+            <option value="GB">United Kingdom</option>
+            <option value="KE">Kenya</option>
+            <option value="NG">Nigeria</option>
+            <option value="ZA">South Africa</option>
+            <option value="IN">India</option>
+            <option value="PK">Pakistan</option>
+            <option value="MX">Mexico</option>
+            <option value="BR">Brazil</option>
+            <option value="EG">Egypt</option>
+            <option value="GH">Ghana</option>
+            <option value="ET">Ethiopia</option>
+            <option value="TZ">Tanzania</option>
+            <option value="UG">Uganda</option>
+            <option value="CA">Canada</option>
+            <option value="AU">Australia</option>
+            <option value="FR">France</option>
+            <option value="DE">Germany</option>
+            <option value="JP">Japan</option>
+            <option value="CN">China</option>
+            <option value="OTHER">Other</option>
+          </select>
+          <div class="profile-modal-actions">
+            <button type="button" class="btn btn-primary" id="profileSaveBtn">Save</button>
+            <button type="button" class="btn btn-secondary" id="profileCloseBtn">Close</button>
+          </div>
+        </div>
+      </div>
+      <!-- Recipe modal -->
+      <div id="recipeModal" class="recipe-modal" hidden aria-label="Recipe">
+        <div class="recipe-modal-content">
+          <div class="recipe-modal-header">
+            <h3 id="recipeModalTitle">Recipe</h3>
+            <button type="button" class="btn btn-ghost recipe-modal-close" id="recipeModalClose" title="Close">×</button>
+          </div>
+          <div id="recipeModalBody" class="recipe-modal-body"></div>
+        </div>
+      </div>
+      <!-- Sign in modal -->
+      <div id="signInModal" class="auth-modal profile-modal" hidden aria-label="Sign in">
+        <div class="auth-modal-content">
+          <div class="auth-modal-header auth-header-signin">
+            <h2 class="auth-modal-title">Sign in</h2>
+            <p class="auth-modal-subtitle">Welcome back. Enter your details to continue.</p>
+          </div>
+          <form class="auth-form" id="signInForm" novalidate>
+            <label for="signInEmail">Email</label>
+            <input type="email" id="signInEmail" placeholder="you@example.com" autocomplete="email" required>
+            <label for="signInPassword">Password</label>
+            <input type="password" id="signInPassword" placeholder="Password" autocomplete="current-password" required>
+            <div class="auth-modal-actions">
+              <button type="submit" class="btn btn-primary auth-btn-submit" id="signInSubmitBtn">Sign in</button>
+              <button type="button" class="btn btn-secondary auth-btn-cancel" id="signInCloseBtn">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Sign up modal -->
+      <div id="signUpModal" class="auth-modal profile-modal" hidden aria-label="Sign up">
+        <div class="auth-modal-content">
+          <div class="auth-modal-header auth-header-signup">
+            <h2 class="auth-modal-title">Sign up</h2>
+            <p class="auth-modal-subtitle">Create an account to save your preferences and meal plans.</p>
+          </div>
+          <form class="auth-form" id="signUpForm" novalidate>
+            <label for="signUpName">Display name</label>
+            <input type="text" id="signUpName" placeholder="Your name" autocomplete="name" required>
+            <label for="signUpEmail">Email</label>
+            <input type="email" id="signUpEmail" placeholder="you@example.com" autocomplete="email" required>
+            <label for="signUpPassword">Password</label>
+            <input type="password" id="signUpPassword" placeholder="Choose a password" autocomplete="new-password" required>
+            <div class="auth-modal-actions">
+              <button type="submit" class="btn btn-primary auth-btn-submit" id="signUpSubmitBtn">Sign up</button>
+              <button type="button" class="btn btn-secondary auth-btn-cancel" id="signUpCloseBtn">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <!-- Side menu (slides in from left) -->
+    <aside id="sideMenu" class="side-menu" aria-label="Main menu">
+      <div class="side-menu-backdrop" id="sideMenuBackdrop" aria-hidden="true"></div>
+      <div class="side-menu-panel">
+        <div class="side-menu-header">
+          <a href="#" class="side-menu-logo" data-section="dashboard">Zara</a>
+          <p class="side-menu-tagline">Reminders & meal prep, with you.</p>
+          <button type="button" class="side-menu-close" id="sideMenuClose" aria-label="Close menu" title="Close">×</button>
+        </div>
+        <nav class="side-menu-nav">
+          <a href="#" class="side-menu-link" data-section="dashboard">Dashboard</a>
+          <a href="#" class="side-menu-link" data-section="todos">To-Dos</a>
+          <a href="#" class="side-menu-link" data-section="mealplan">Meal Plan</a>
+          <a href="#" class="side-menu-link" data-section="fooddiary">Food Diary</a>
+          <a href="#" class="side-menu-link" data-section="profile">Profile</a>
+          <button type="button" class="side-menu-link side-menu-link-chat" data-action="open-chat">
+            <span class="chat-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span>
+            Chat with Zara
+          </button>
+        </nav>
+        <div class="side-menu-user">
+          <div class="side-menu-user-pill">
+            <span class="side-menu-user-dot" aria-hidden="true"></span>
+            <span class="side-menu-user-name" id="sideMenuProfileLabel">Guest</span>
+          </div>
+        </div>
+        <div class="side-menu-auth">
+          <button type="button" class="btn btn-primary side-menu-auth-btn" id="signInBtn">Sign in</button>
+          <button type="button" class="btn btn-secondary side-menu-auth-btn" id="signUpBtn">Sign up</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <!-- Dashboard -->
+      <section id="dashboard" class="panel active">
+        <div class="section-banner banner-dashboard">
+          <img class="banner-dashboard-pic" src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=120&h=120&fit=crop" alt="" loading="lazy">
+          <div class="banner-dashboard-text">
+            <h1>Welcome back</h1>
+            <p class="welcome-sub" id="welcomeName">Here’s your day at a glance.</p>
+          </div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="card card-split today-todos">
+            <div class="card-half-pic card-half-pic-todos">
+              <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=400&h=300&fit=crop" alt="" loading="lazy">
+              <span class="card-pic-fade" aria-hidden="true"></span>
+            </div>
+            <div class="card-half-note">
+              <h2>Today’s to-dos</h2>
+              <ul id="dashboardTodoList"></ul>
+              <a href="#" class="link-more" data-section="todos">View all to-dos →</a>
+            </div>
+          </div>
+          <div class="card card-split today-meals">
+            <div class="card-half-pic card-half-pic-meals">
+              <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop" alt="" loading="lazy">
+              <span class="card-pic-fade" aria-hidden="true"></span>
+            </div>
+            <div class="card-half-note">
+              <h2>Today’s meals</h2>
+              <div id="dashboardMeals"></div>
+              <a href="#" class="link-more" data-section="mealplan">Edit meal plan →</a>
+            </div>
+          </div>
+          <div class="card card-split gym-finder">
+            <div class="card-half-pic card-half-pic-gym">
+              <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop" alt="" loading="lazy">
+              <span class="card-pic-fade" aria-hidden="true"></span>
+            </div>
+            <div class="card-half-note">
+              <h2>Find a gym or health center near you</h2>
+              <p class="card-desc">Stay active. Discover gyms and health centers nearby.</p>
+              <a href="https://www.google.com/maps/search/gym+near+me" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-with-icon gym-finder-btn">
+                <span class="gym-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><path d="M6 1v3"/><path d="M10 1v3"/><path d="M14 1v3"/></svg>
+                </span>
+                Find nearby
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- To-Dos / Reminders -->
+      <section id="todos" class="panel panel-todos">
+        <div class="section-banner banner-todos">
+          <h1>To-Dos & Reminders</h1>
+          <p class="section-desc">Zara will remind you so you don’t forget.</p>
+        </div>
+        <div class="todo-note">
+          <div class="todo-note-margin" aria-hidden="true"></div>
+          <div class="todo-note-paper">
+            <div class="todo-shopping-row">
+              <button type="button" class="btn btn-secondary btn-note" id="generateShoppingListBtn" title="Generate a healthy shopping list from your meal plan">
+                Generate AI shopping list from meal plan
+              </button>
+            </div>
+            <div class="todo-actions">
+              <input type="text" id="todoInput" placeholder="What do you need to do?" autocomplete="off">
+          <input type="datetime-local" id="todoDue" title="When to remind">
+          <button type="button" class="btn btn-primary btn-note" id="addTodoBtn">Add</button>
+            </div>
+            <div class="todo-filters">
+          <button type="button" class="filter-btn active" data-filter="all">All</button>
+          <button type="button" class="filter-btn" data-filter="today">Today</button>
+          <button type="button" class="filter-btn" data-filter="upcoming">Upcoming</button>
+          <button type="button" class="filter-btn" data-filter="done">Done</button>
+            </div>
+            <ul id="todoList" class="todo-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Meal Plan (calendar + diet-plan background) -->
+      <section id="mealplan" class="panel panel-mealplan">
+        <div class="mealplan-section-bg" aria-hidden="true">
+          <div class="mealplan-bg-image"></div>
+          <div class="mealplan-bg-overlay"></div>
+        </div>
+        <div class="mealplan-section-content">
+          <div class="section-banner banner-meals">
+            <h1>Meal Plan</h1>
+            <p class="section-desc">Plan by day. Click a date to add or edit meals. Ask Zara to fill your week.</p>
+          </div>
+          <div class="mealplan-actions">
+            <button type="button" class="btn btn-primary" id="zaraPlanBtn">Ask Zara to plan my week</button>
+            <button type="button" class="btn btn-secondary" id="clearMealPlanBtn">Clear plan</button>
+          </div>
+          <div class="calendar-nav">
+            <button type="button" class="btn btn-ghost" id="monthPrev" title="Previous month">←</button>
+            <h2 id="calendarMonthLabel" class="calendar-month-label">February 2025</h2>
+            <button type="button" class="btn btn-ghost" id="monthNext" title="Next month">→</button>
+          </div>
+          <div class="calendar-wrap" id="calendarWrap">
+            <div class="calendar-head">
+              <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+          </div>
+          <div id="dayDetailPanel" class="day-detail-panel hidden">
+            <div class="day-detail-header">
+              <h3 id="dayDetailTitle">Meals for this day</h3>
+              <button type="button" class="btn btn-ghost day-detail-close" id="dayDetailClose" title="Close">×</button>
+            </div>
+            <div class="day-detail-slots" id="dayDetailSlots"></div>
+          </div>
+          <div class="mealplan-taupe-banner">
+            <video class="mealplan-banner-video" src="images/5645037-hd_1920_1080_25fps.mp4" muted loop playsinline aria-label="Healthy lifestyle"></video>
+            <p class="mealplan-banner-text">Plan healthy, eat well, stay on track.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Food Diary (photos + AI feedback) -->
+      <section id="fooddiary" class="panel panel-food">
+        <div class="food-section-bg" aria-hidden="true">
+          <div class="food-bg-image"></div>
+          <div class="food-bg-overlay"></div>
+          <div class="food-deco food-deco-1"><img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=120&h=120&fit=crop" alt="" loading="lazy"></div>
+          <div class="food-deco food-deco-2"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=100&h=100&fit=crop" alt="" loading="lazy"></div>
+          <div class="food-deco food-deco-3"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=100&h=100&fit=crop" alt="" loading="lazy"></div>
+        </div>
+        <div class="food-section-content">
+          <div class="section-banner banner-diary">
+            <h1>Food Diary</h1>
+            <p class="section-desc">Add a photo of your meal. Zara will check it against your plan.</p>
+          </div>
+          <div class="upload-zone" id="uploadZone">
+          <input type="file" id="foodPhotoInput" accept="image/*" hidden>
+          <p>Drop a photo here or click to upload</p>
+          <span class="upload-hint">Zara will “read” your plate and compare it to your meal plan.</span>
+        </div>
+          <div id="foodAnalysis" class="food-analysis hidden"></div>
+          <div class="diary-entries" id="diaryEntries"></div>
+        </div>
+      </section>
+
+      <!-- Profile (full page in menu) -->
+      <section id="profile" class="panel panel-profile">
+        <div class="section-banner banner-profile">
+          <h1>Your profile</h1>
+          <p class="section-desc">Update your name and country so Zara can personalize your experience and meal plans.</p>
+        </div>
+        <div class="profile-page-card">
+          <div class="profile-page-avatar" aria-hidden="true">
+            <span class="profile-avatar-inner" id="profileAvatarLetter">?</span>
+          </div>
+          <form id="profilePageForm" class="profile-page-form">
+            <label for="profilePageName">Display name</label>
+            <input type="text" id="profilePageName" placeholder="Enter your name" autocomplete="name">
+            <label for="profilePageCountry">Country</label>
+            <select id="profilePageCountry" aria-label="Your country for meal suggestions">
+              <option value="">Select your country</option>
+              <option value="US">United States</option>
+              <option value="GB">United Kingdom</option>
+              <option value="KE">Kenya</option>
+              <option value="NG">Nigeria</option>
+              <option value="ZA">South Africa</option>
+              <option value="IN">India</option>
+              <option value="PK">Pakistan</option>
+              <option value="MX">Mexico</option>
+              <option value="BR">Brazil</option>
+              <option value="EG">Egypt</option>
+              <option value="GH">Ghana</option>
+              <option value="ET">Ethiopia</option>
+              <option value="TZ">Tanzania</option>
+              <option value="UG">Uganda</option>
+              <option value="CA">Canada</option>
+              <option value="AU">Australia</option>
+              <option value="FR">France</option>
+              <option value="DE">Germany</option>
+              <option value="JP">Japan</option>
+              <option value="CN">China</option>
+              <option value="OTHER">Other</option>
+            </select>
+            <button type="submit" class="btn btn-primary profile-page-save">Save changes</button>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Chat sidebar (slides in from the right) -->
+  <aside id="chatSidebar" class="chat-sidebar" aria-label="Chat with Zara">
+    <div class="chat-sidebar-backdrop" id="chatSidebarBackdrop" aria-hidden="true"></div>
+    <div class="chat-sidebar-panel">
+      <div class="chat-sidebar-header">
+        <span class="chat-header-title">Zara</span>
+        <button type="button" class="chat-sidebar-close" id="chatSidebarClose" aria-label="Close chat" title="Close">×</button>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-wrap">
+        <input type="text" id="chatInput" placeholder="Type to Zara…" autocomplete="off">
+        <button type="button" class="btn btn-primary" id="chatSendBtn">Send</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Floating chat icon (visible on every page) -->
+  <button type="button" class="chat-fab" id="chatFab" aria-label="Chat with Zara" title="Chat with Zara">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  </button>
+
+  </div><!-- /#mainApp -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
